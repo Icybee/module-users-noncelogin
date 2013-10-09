@@ -29,9 +29,10 @@
 		"icanboogie/icanboogie": "*",
 		"icanboogie/common": "*",
 		"icanboogie/module": "*",
-		"icanboogie/i18n": "*"
+		"icanboogie/i18n": "*",
+		"icybee/core": "*"
 	},
 	"autoload": {
-		"classmap": [ "lib", "vendor/icybee/core/lib" ]
+		"classmap": [ "lib" ]
 	}
 }
