@@ -48,10 +48,20 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 		$ticket->token = str_rot13($ticket->token);
 
 		$request = Request::from(self::$route->format($ticket));
-		$response = $request();
 
-		$this->assertFalse($response->is_successful);
-		$this->assertNotNull($response->errors['token']);
+		try
+		{
+			$response = $request();
+
+			$this->fail('The Failure exception should have been thrown.');
+		}
+		catch (\ICanBoogie\Operation\Failure $e)
+		{
+			$response = $e->operation->response;
+
+			$this->assertFalse($response->is_successful);
+			$this->assertNotNull($response->errors['token']);
+		}
 	}
 
 	public function test_invalid_uid()
@@ -65,11 +75,20 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 		$ticket->expire_at = '+1 hour';
 		$ticket->save();
 
-		$request = Request::from(self::$route->format($ticket));
-		$response = $request();
+		try
+		{
+			$request = Request::from(self::$route->format($ticket));
+			$response = $request();
 
-		$this->assertFalse($response->is_successful);
-		$this->assertNotNull($response->errors['uid']);
+			$this->fail('The Failure exception should have been thrown.');
+		}
+		catch (\ICanBoogie\Operation\Failure $e)
+		{
+			$response = $e->operation->response;
+
+			$this->assertFalse($response->is_successful);
+			$this->assertNotNull($response->errors['uid']);
+		}
 	}
 
 	public function test_expired()
@@ -78,11 +97,20 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 		$ticket->expire_at = '-10 days';
 		$ticket->save();
 
-		$request = Request::from(self::$route->format($ticket));
-		$response = $request();
+		try
+		{
+			$request = Request::from(self::$route->format($ticket));
+			$response = $request();
 
-		$this->assertFalse($response->is_successful);
-		$this->assertNotNull($response->errors['expire_at']);
+			$this->fail('The Failure exception should have been thrown.');
+		}
+		catch (\ICanBoogie\Operation\Failure $e)
+		{
+			$response = $e->operation->response;
+
+			$this->assertFalse($response->is_successful);
+			$this->assertNotNull($response->errors['expire_at']);
+		}
 	}
 
 	public function test_request()

@@ -19,13 +19,23 @@ class NonceLoginRequestTest extends \PHPUnit_Framework_TestCase
 	{
 		$request = Request::from(array('request_params' => array('email' => 'invalid_email_address')));
 		$operation = new NonceLoginRequestOperation;
-		$response = $operation($request);
 
-		$this->assertNull($response->rc);
-		$this->assertNull($response->message);
-		$this->assertNotEmpty($response->errors['email']);
-		$this->assertInstanceOf('ICanBoogie\I18n\FormattedString', $response->errors['email']);
-		$this->assertTrue($response->is_client_error);
+		try
+		{
+			$response = $operation($request);
+
+			$this->fail('The Failure exception should have been thrown.');
+		}
+		catch (\ICanBoogie\Operation\Failure $e)
+		{
+			$response = $e->operation->response;
+
+			$this->assertNull($response->rc);
+			$this->assertNull($response->message);
+			$this->assertNotEmpty($response->errors['email']);
+			$this->assertInstanceOf('ICanBoogie\I18n\FormattedString', $response->errors['email']);
+			$this->assertTrue($response->is_client_error);
+		}
 	}
 
 	public function test_request()

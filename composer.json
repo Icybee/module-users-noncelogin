@@ -22,7 +22,7 @@
 		"icanboogie/module-installer": "*",
 		"icanboogie/activerecord": "*",
 		"icanboogie/http": "*",
-		"icanboogie/operation": "dev-no_special_case_for_booleans",
+		"icanboogie/operation": "*",
 		"icybee/module-users": "*"
 	},
 	"require-dev": {
