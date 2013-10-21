@@ -1,4 +1,4 @@
-# Nonce Login
+# Nonce Login [![Build Status](https://travis-ci.org/Icybee/module-users-noncelogin.png?branch=master)](https://travis-ci.org/Icybee/module-users-noncelogin)
 
 Provides nonce login tickets to users who have forgot their password.
 
