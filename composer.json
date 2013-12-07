@@ -20,16 +20,13 @@
 	"require": {
 		"php": ">=5.3.0",
 		"icanboogie/module-installer": "*",
-		"icanboogie/activerecord": "*",
-		"icanboogie/http": "*",
-		"icanboogie/operation": "*",
-		"icybee/module-users": "*"
+		"icanboogie/activerecord": "2.x",
+		"icanboogie/operation": "2.x",
+		"icybee/module-users": "2.x"
 	},
 	"require-dev": {
-		"icanboogie/icanboogie": "*",
-		"icanboogie/common": "*",
-		"icanboogie/module": "*",
-		"icanboogie/i18n": "*",
+		"icanboogie/icanboogie": "2.x",
+		"icanboogie/i18n": "2.x",
 		"icybee/core": "*"
 	},
 	"autoload": {

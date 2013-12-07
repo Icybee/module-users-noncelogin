@@ -18,7 +18,7 @@ class Module extends \ICanBoogie\Module
 	const FRESH_PERIOD = 3600;
 	const COOLOFF_DELAY = 900;
 
-	protected function get_views()
+	protected function lazy_get_views()
 	{
 		return array
 		(

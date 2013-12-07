@@ -24,7 +24,7 @@ class NonceLoginOperation extends \ICanBoogie\Operation
 {
 	private $ticket;
 
-	protected function volatile_get_ticket()
+	protected function get_ticket()
 	{
 		return $this->ticket;
 	}

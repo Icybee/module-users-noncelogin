@@ -54,7 +54,7 @@ class Ticket extends ActiveRecord
 	 *
 	 * @return \ICanBoogie\DateTime
 	 */
-	protected function volatile_get_expire_at()
+	protected function get_expire_at()
 	{
 		$datetime = $this->expire_at;
 
@@ -71,7 +71,7 @@ class Ticket extends ActiveRecord
 	 *
 	 * @param mixed $value
 	 */
-	protected function volatile_set_expire_at($datetime)
+	protected function set_expire_at($datetime)
 	{
 		$this->expire_at = $datetime;
 	}

@@ -42,7 +42,7 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 	 *
 	 * @return User|null
 	 */
-	protected function get_record()
+	protected function lazy_get_record()
 	{
 		global $core;
 
@@ -70,7 +70,7 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 	 *
 	 * @return \Icybee\Modules\Users\User
 	 */
-	protected function volatile_get_user()
+	protected function get_user()
 	{
 		return $this->record;
 	}
@@ -82,7 +82,7 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 	 *
 	 * @return Ticket
 	 */
-	protected function volatile_get_ticket()
+	protected function get_ticket()
 	{
 		return $this->ticket;
 	}
