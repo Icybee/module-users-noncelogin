@@ -19,10 +19,17 @@ use ICanBoogie\PermissionRequired;
 /**
  * The "nonce-login" operation is used to login a user using a one time, time limited pass created
  * by the "nonce-request" operation.
+ *
+ * @property-read Ticket $ticket The nonce login ticket.
  */
 class NonceLoginOperation extends \ICanBoogie\Operation
 {
 	private $ticket;
+
+	static protected function t($format, array $args=array(), array $options=array())
+	{
+		return new FormattedString($format, $args, $options + array('scope' => 'users_noncelogin'));
+	}
 
 	protected function volatile_get_ticket()
 	{
@@ -38,7 +45,7 @@ class NonceLoginOperation extends \ICanBoogie\Operation
 
 		if (!$token)
 		{
-			$errors['token'] = new FormattedString("The nonce login Token is required.");
+			$errors['token'] = $this->t("The nonce login Token is required.");
 
 			return false;
 		}
@@ -47,21 +54,21 @@ class NonceLoginOperation extends \ICanBoogie\Operation
 
 		if (!$ticket)
 		{
-			$errors['token'] = new FormattedString("Unknown token.");
+			$errors['token'] = $this->t("Unknown token.");
 
 			return false;
 		}
 
 		if ($ticket->expire_at < DateTime::now())
 		{
-			$errors['expire_at'] = new FormattedString("This nonce login ticket has expired at :date.", array(':date' => $ticket->expire_at->local->as_db));
+			$errors['expire_at'] = $this->t("This nonce login ticket has expired at :date.", array(':date' => $ticket->expire_at->local->as_db));
 
 			return false;
 		}
 
 		if ($ticket->ip != $request->ip)
 		{
-			$errors['ip'] = new FormattedString("The IP address doesn't match the one of the initial request.");
+			$errors['ip'] = $this->t("The IP address doesn't match the one of the initial request.");
 
 			return false;
 		}
@@ -72,7 +79,7 @@ class NonceLoginOperation extends \ICanBoogie\Operation
 		}
 		catch (RecordNotFound $e)
 		{
-			$errors['uid'] = new FormattedString("The user associated with this nonce login no longer exists.");
+			$errors['uid'] = $this->t("The user associated with this nonce login no longer exists.");
 
 			return false;
 		}
@@ -82,20 +89,15 @@ class NonceLoginOperation extends \ICanBoogie\Operation
 
 	protected function process()
 	{
-		global $core;
-
 		$ticket = $this->ticket;
 		$user = $ticket->user;
 
 		$ticket->delete();
-// 		$core->models['users.noncelogin']->filter_by_uid($user->uid)->delete();
 
 		$user->login();
 
-// 		\ICanBoogie\log_info("You are now logged in, please enter your password.");
-
 		$this->response->location = $user->url('profile');
-		$this->response->message = new FormattedString("You are now logged in, please enter your password.");
+		$this->response->message = $this->t("You are now logged in, please enter your password.");
 
 		return true;
 	}

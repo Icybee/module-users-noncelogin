@@ -11,9 +11,11 @@
 
 namespace Icybee\Modules\Users\NonceLogin;
 
-use ICanBoogie\Operation\ProcessEvent;
 use ICanBoogie\I18n\Translator\Proxi;
 use ICanBoogie\Mailer;
+use ICanBoogie\Operation\FailureEvent;
+use ICanBoogie\Operation\ProcessEvent;
+use ICanBoogie\HTTP\RedirectResponse;
 
 class Hooks
 {
@@ -39,7 +41,7 @@ class Hooks
 		$core->mailer(array
 		(
 			Mailer::T_DESTINATION => $user->email,
-			Mailer::T_FROM => $core->site->title . ' <no-reply@icybee.org>', // TODO-20110709: customize to site domain
+			Mailer::T_FROM => $core->site->title . ' <no-reply@' . $_SERVER['HTTP_HOST'] . '>',
 			Mailer::T_SUBJECT => $t('message.subject'),
 			Mailer::T_MESSAGE => $t
 			(
@@ -51,5 +53,39 @@ class Hooks
 				)
 			)
 		));
+	}
+
+	static public function on_operation_failure_rescue(\ICanBoogie\Exception\RescueEvent $event, \ICanBoogie\Operation\Failure $target)
+	{
+		global $core;
+
+		$operation = $target->operation;
+
+		if (!($operation instanceof NonceLoginOperation))
+		{
+			return;
+		}
+
+		if (!$event->request['token'])
+		{
+			return;
+		}
+
+		$errors = $operation->response->errors;
+
+		if (!$errors['token'])
+		{
+			return;
+		}
+
+		$redirect_to = $core->site->resolve_view_url('users/nonce_login_request');
+
+		if (!$redirect_to)
+		{
+			return;
+		}
+
+		$event->response = new RedirectResponse($redirect_to);
+		$event->stop();
 	}
 }
