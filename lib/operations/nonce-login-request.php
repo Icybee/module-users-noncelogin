@@ -12,7 +12,6 @@
 namespace Icybee\Modules\Users\NonceLogin;
 
 use ICanBoogie\DateTime;
-use ICanBoogie\I18n\FormattedString;
 use ICanBoogie\PermissionRequired;
 use ICanBoogie\HTTP\Request;
 
@@ -95,14 +94,14 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 
 		if (!$email)
 		{
-			$errors['email'] = new FormattedString('The field %field is required!', array('%field' => 'Votre adresse E-Mail'));
+			$errors['email'] = $errors->format('The field %field is required!', array('%field' => 'Votre adresse E-Mail'));
 
 			return false;
 		}
 
 		if (!filter_var($email, FILTER_VALIDATE_EMAIL))
 		{
-			$errors['email'] = new FormattedString("Invalid email address: %email.", array('%email' => $email));
+			$errors['email'] = $errors->format("Invalid email address: %email.", array('%email' => $email));
 
 			return false;
 		}
@@ -111,7 +110,7 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 
 		if (!$user)
 		{
-			$errors['email'] = new FormattedString("Unknown email address.");
+			$errors['email'] = $errors->format("Unknown email address.");
 
 			return false;
 		}
@@ -133,7 +132,7 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 		{
 			throw new PermissionRequired
 			(
-				new FormattedString("nonce_login_request.operation.already_sent", array
+				$errors->format("nonce_login_request.operation.already_sent", array
 				(
 					':time' => DateTime::from('@' . ($expire_at->timestamp - Module::FRESH_PERIOD + Module::COOLOFF_DELAY), 'utc')->local->format('H:i')
 				)),
@@ -175,7 +174,7 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 		$ticket->save();
 
 		$this->ticket = $ticket;
-		$this->response->message = new FormattedString('success', array('%email' => $user->email), array('scope' => \ICanBoogie\normalize($user->constructor, '_') . '.nonce_login_request.operation'));
+		$this->response->message = $errors->format('success', array('%email' => $user->email), array('scope' => \ICanBoogie\normalize($user->constructor, '_') . '.nonce_login_request.operation'));
 
 		return true;
 	}

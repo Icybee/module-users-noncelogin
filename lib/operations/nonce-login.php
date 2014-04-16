@@ -38,7 +38,7 @@ class NonceLoginOperation extends \ICanBoogie\Operation
 
 		if (!$token)
 		{
-			$errors['token'] = new FormattedString("The nonce login Token is required.");
+			$errors['token'] = $errors->format("The nonce login Token is required.");
 
 			return false;
 		}
@@ -47,21 +47,21 @@ class NonceLoginOperation extends \ICanBoogie\Operation
 
 		if (!$ticket)
 		{
-			$errors['token'] = new FormattedString("Unknown token.");
+			$errors['token'] = $errors->format("Unknown token.");
 
 			return false;
 		}
 
 		if ($ticket->expire_at < DateTime::now())
 		{
-			$errors['expire_at'] = new FormattedString("This nonce login ticket has expired at :date.", array(':date' => $ticket->expire_at->local->as_db));
+			$errors['expire_at'] = $errors->format("This nonce login ticket has expired at :date.", array(':date' => $ticket->expire_at->local->as_db));
 
 			return false;
 		}
 
 		if ($ticket->ip != $request->ip)
 		{
-			$errors['ip'] = new FormattedString("The IP address doesn't match the one of the initial request.");
+			$errors['ip'] = $errors->format("The IP address doesn't match the one of the initial request.");
 
 			return false;
 		}
@@ -72,7 +72,7 @@ class NonceLoginOperation extends \ICanBoogie\Operation
 		}
 		catch (RecordNotFound $e)
 		{
-			$errors['uid'] = new FormattedString("The user associated with this nonce login no longer exists.");
+			$errors['uid'] = $errors->format("The user associated with this nonce login no longer exists.");
 
 			return false;
 		}
