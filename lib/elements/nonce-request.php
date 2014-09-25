@@ -68,7 +68,7 @@ class NonceRequestForm extends Form
 					)
 				),
 
-				Element::WIDGET_CONSTRUCTOR => 'NonceRequest',
+				Element::IS => 'NonceRequest',
 
 				'class' => 'widget-nonce-request',
 				'name' => 'users/nonce-request'
