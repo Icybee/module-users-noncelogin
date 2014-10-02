@@ -13,7 +13,6 @@ namespace Icybee\Modules\Users\NonceLogin;
 
 use ICanBoogie\DateTime;
 use ICanBoogie\PermissionRequired;
-use ICanBoogie\HTTP\Request;
 
 /**
  * Provides a nonce login.
@@ -39,7 +38,7 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 	/**
 	 * Returns the record assocaiated with the email address specified by the `email` param.
 	 *
-	 * @return User|null
+	 * @return \Icybee\Modules\Users\User|null
 	 */
 	protected function lazy_get_record()
 	{
@@ -52,16 +51,15 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 			return;
 		}
 
-		/* @var $record \Icybee\Modules\Users\User */
+		$model = $core->models['users'];
+		$uid = $model->select('uid')->filter_by_email($email)->rc;
 
-		$record = $core->models['users']->filter_by_email($email)->one;
-
-		if ($record && $record->constructor != 'users')
+		if (!$uid)
 		{
-			$record = $core->models[$record->constructor][$record->uid];
+			return;
 		}
 
-		return $record;
+		return $model[$uid];
 	}
 
 	/**
