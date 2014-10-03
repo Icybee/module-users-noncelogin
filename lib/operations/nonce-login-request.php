@@ -128,7 +128,7 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 
 		if ($expire_at && (time() + Module::FRESH_PERIOD - $expire_at->timestamp < Module::COOLOFF_DELAY))
 		{
-			throw new PermissionRequired
+			throw new \Exception
 			(
 				$errors->format("nonce_login_request.operation.already_sent", array
 				(
@@ -172,7 +172,15 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 		$ticket->save();
 
 		$this->ticket = $ticket;
-		$this->response->message = $errors->format('success', array('%email' => $user->email), array('scope' => \ICanBoogie\normalize($user->constructor, '_') . '.nonce_login_request.operation'));
+		$this->response->message = $this->response->errors->format('success', [
+
+			'%email' => $user->email
+
+		], [
+
+			'scope' => \ICanBoogie\normalize($user->constructor, '_') . '.nonce_login_request.operation'
+
+		]);
 
 		return true;
 	}
