@@ -13,7 +13,6 @@ namespace Icybee\Modules\Users\NonceLogin;
 
 use ICanBoogie\Operation\ProcessEvent;
 use ICanBoogie\I18n\Translator\Proxi;
-use ICanBoogie\Mailer;
 
 class Hooks
 {
@@ -34,22 +33,24 @@ class Hooks
 		$url = $core->site->url . $route->format($ticket);
 		$until = $ticket->expire_at->local->format('H:i');
 
-		$t = new Proxi(array('scope' => \ICanBoogie\normalize($user->constructor, '_') . '.nonce_login_request.operation'));
+		$t = new Proxi([
 
-		$core->mailer(array
-		(
-			Mailer::T_DESTINATION => $user->email,
-			Mailer::T_FROM => $core->site->title . ' <no-reply@icybee.org>', // TODO-20110709: customize to site domain
-			Mailer::T_SUBJECT => $t('message.subject'),
-			Mailer::T_MESSAGE => $t
-			(
-				'message.template', array
-				(
-					':url' => $url,
-					':until' => $until,
-					':ip' => $event->request->ip
-				)
-			)
-		));
+			'scope' => \ICanBoogie\normalize($user->constructor, '_') . '.nonce_login_request.operation'
+
+		]);
+
+		$core->mailer([
+
+			'to' => $user->email,
+			'from' => $core->site->title . ' <no-reply@icybee.org>', // TODO-20110709: customize to site domain
+			'subject' => $t('message.subject'),
+			'body' => $t('message.template', [
+
+				':url' => $url,
+				':until' => $until,
+				':ip' => $event->request->ip
+
+			])
+		]);
 	}
 }
