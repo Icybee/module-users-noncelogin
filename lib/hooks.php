@@ -30,7 +30,7 @@ class Hooks
 		$ticket = $target->ticket;
 
 		$route = $core->routes['api:nonce-login'];
-		$url = $core->site->url . $route->format($ticket);
+		$url = $route->format($ticket)->absolute_url;
 		$until = $ticket->expire_at->local->format('H:i');
 
 		$t = new Proxi([
