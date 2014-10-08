@@ -39,7 +39,7 @@ class Hooks
 
 		]);
 
-		$core->mailer([
+		$core->mail([
 
 			'to' => $user->email,
 			'from' => $core->site->title . ' <no-reply@icybee.org>', // TODO-20110709: customize to site domain
@@ -51,6 +51,7 @@ class Hooks
 				':ip' => $event->request->ip
 
 			])
-		]);
+
+		], [ 'sender' => $target ]);
 	}
 }
