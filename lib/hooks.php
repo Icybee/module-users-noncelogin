@@ -42,7 +42,7 @@ class Hooks
 		$core->mail([
 
 			'to' => $user->email,
-			'from' => $core->site->title . ' <no-reply@icybee.org>', // TODO-20110709: customize to site domain
+			'from' => 'no-reply@' . $_SERVER['HTTP_HOST'],
 			'subject' => $t('message.subject'),
 			'body' => $t('message.template', [
 
