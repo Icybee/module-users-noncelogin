@@ -88,11 +88,8 @@ class NonceLoginOperation extends \ICanBoogie\Operation
 		$user = $ticket->user;
 
 		$ticket->delete();
-// 		$core->models['users.noncelogin']->filter_by_uid($user->uid)->delete();
 
 		$user->login();
-
-// 		\ICanBoogie\log_info("You are now logged in, please enter your password.");
 
 		$this->response->location = $user->url('profile');
 		$this->response->message = new FormattedString("You are now logged in, please enter your password.");

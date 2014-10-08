@@ -4,6 +4,7 @@
 	"description": "Provides nonce login tickets to users who have forgot their password.",
 	"keywords": [ "user", "nonce login" ],
 	"license": "BSD-3-Clause",
+
 	"authors": [
 		{
 			"name": "Olivier Laviale",
@@ -12,24 +13,35 @@
 			"role" : "Developer"
 		}
 	],
+
 	"support": {
 		"issues": "https://github.com/Icybee/module-users-noncelogin/issues",
 		"source": "https://github.com/Icybee/module-users-noncelogin"
 	},
+
 	"minimum-stability": "dev",
+
 	"require": {
-		"php": ">=5.3.0",
+		"php": ">=5.4.0",
 		"icanboogie/module-installer": "*",
 		"icanboogie/activerecord": "2.x",
 		"icanboogie/operation": "2.x",
 		"icybee/module-users": "2.x"
 	},
+
 	"require-dev": {
 		"icanboogie/icanboogie": "2.x",
 		"icanboogie/i18n": "2.x",
 		"icybee/core": "*"
 	},
+
 	"autoload": {
 		"classmap": [ "lib" ]
+	},
+
+	"scripts": {
+
+		"post-autoload-dump": "ICanBoogie\\AutoConfig\\Generator::on_autoload_dump"
+
 	}
 }

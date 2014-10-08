@@ -11,13 +11,15 @@
 
 namespace Icybee\Modules\Users\NonceLogin;
 
+use ICanBoogie\Errors;
+use ICanBoogie\Core;
+
 use Icybee\Modules\Users\User;
 
-global $core;
+$_SERVER['DOCUMENT_ROOT'] = __DIR__;
+$_SERVER['HTTP_HOST'] = 'icanboogie.org';
 
-$vendor_dir = realpath(__DIR__ . '/../vendor');
-
-require $vendor_dir . '/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 /**
  * An instance of this class is used to fake the Session class that is used to handle sessions.
@@ -38,47 +40,31 @@ class FakeSession extends \ICanBoogie\Session
 	}
 }
 
-$core = new \ICanBoogie\Core(array(
+global $core;
 
-	'config paths' => array
-	(
-		__DIR__
-	),
+$core = new Core(\ICanBoogie\array_merge_recursive(\ICanBoogie\get_autoconfig(), [
 
-	'modules paths' => array
-	(
-		$vendor_dir . '/icanboogie-modules',
-		realpath(__DIR__ . '/../')
-	),
+	'config-path' => [ __DIR__ . DIRECTORY_SEPARATOR . 'config' => 10 ],
+	'module-path' => [ dirname(__DIR__) ]
 
-	'connections' => array
-	(
-		'primary' => array
-		(
-			'dsn' => 'sqlite::memory:'
-		)
-	)
-));
-
-$core->site = (object) array
-(
-	'url' => 'http://testing.localhost',
-	'title' => 'testing',
-	'path' => ''
-);
+]));
 
 $core->session = new FakeSession;
 
-$core();
+$core->boot();
 
-$core->models['users']->install();
-$core->models['users.noncelogin']->install();
+$errors = $core->modules->install(new Errors);
 
-$user = User::from(array(
+if ($errors->count())
+{
+	var_dump($errors); exit;
+}
+
+$user = User::from([
 
 	'email' => 'olivier.laviale@gmail.com',
 	'username' => 'olvlvl'
 
-));
+]);
 
 $user->save();

@@ -2,23 +2,30 @@
 
 namespace Icybee\Modules\Users\NonceLogin;
 
-return array
-(
-	'api:nonce-login-request' => array
-	(
+use ICanBoogie\HTTP\Request;
+
+return [
+
+	'api:nonce-login-request' => [
+
 		'pattern' => '/api/nonce-login-request',
-		'controller' => __NAMESPACE__ . '\NonceLoginRequestOperation'
-	),
+		'controller' => __NAMESPACE__ . '\NonceLoginRequestOperation',
+		'via' => Request::METHOD_POST
 
-	'api:inline-nonce-login-request' => array
-	(
+	],
+
+	'api:inline-nonce-login-request' => [
+
 		'pattern' => '/api/nonce-login-request/:email',
-		'controller' => __NAMESPACE__ . '\NonceLoginRequestOperation'
-	),
+		'controller' => __NAMESPACE__ . '\NonceLoginRequestOperation',
+		'via' => Request::METHOD_POST
 
-	'api:nonce-login' => array
-	(
+	],
+
+	'api:nonce-login' => [
+
 		'pattern' => '/api/nonce-login/<token:[0-9a-z]{40}>',
 		'controller' => __NAMESPACE__ . '\NonceLoginOperation'
-	)
-);
+
+	]
+];

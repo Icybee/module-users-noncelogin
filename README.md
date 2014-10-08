@@ -1,6 +1,79 @@
-# Nonce Login [![Build Status](https://travis-ci.org/Icybee/module-users-noncelogin.png?branch=master)](https://travis-ci.org/Icybee/module-users-noncelogin)
+# Nonce Login [![Build Status](https://travis-ci.org/Icybee/module-users-noncelogin.svg?branch=2.0)](https://travis-ci.org/Icybee/module-users-noncelogin)
 
-Provides nonce login tickets to users who have forgot their password.
+Provides nonce login tickets to users who forgot their password.
+
+
+
+
+
+## Requesting a ticket
+
+Nonce connection tickets are requested with the [NonceLoginRequestOperation][] operation. The
+`api:nonce-login-request` and `api:inline-nonce-login-request` routes can be used to format a URL
+for this operation. The operation can only be performed with the `POST` HTTP method.
+
+```php
+<?php
+
+use ICanBoogie\HTTP\Request;
+
+$request = Request::from([
+
+	'uri' => $core->routes['api:nonce-login-request'],
+	'is_post' => true,
+	'request_params' => [
+
+		'email' => "olivier.laviale@gmail.com"
+
+	]
+
+]);
+
+# or
+
+$request = Request::from([
+
+	'uri' => $core->routes['api:inline-nonce-login-request']->format(['email' => "olivier.laviale@gmail.com"]),
+	'is_post' => true
+
+]);
+```
+
+To prevent abuses, a cooldown period is required before another ticket can be requested for the
+same user. A [TicketAlreadySent][] exception is thrown in attempt to request a ticket before
+the end of that period.
+
+If everything goes well, a message is sent to the user with a link to the nonce login form. The
+message is sent by an event hook attached to the `Icybee\Modules\Users\NonceLogin\NonceLoginRequestOperation::process`
+event. The message is sent using the `mail()` prototype method, which is usually provided by the
+[icanboogie/mailer] package.
+
+
+
+
+
+### Altering the message or the mailer sending it
+
+If the `ICanBoogie\Core::mail()` method is provided by the [icanboogie/mailer] package,
+the `Icybee\Modules\Users\NonceLogin\NonceLoginRequestOperation::mail:before` event can be used to
+alter the message or the mailer sending it.
+
+
+
+
+
+## Exceptions
+
+The following exception are defined:
+
+- [TicketAlreadySent][]: Exception thrown in attempt to request a ticket before the end of
+the cooldown period.
+
+
+
+
+
+----------
 
 
 
@@ -8,7 +81,7 @@ Provides nonce login tickets to users who have forgot their password.
 
 ## Requirement
 
-The package requires PHP 5.3 or later.
+The package requires PHP 5.4 or later.
 
 
 
@@ -24,7 +97,7 @@ Create a `composer.json` file and run `php composer.phar install` command to ins
 	"minimum-stability": "dev",
 	"require":
 	{
-		"icybee/module-users-noncelogin": "*"
+		"icybee/module-users-noncelogin": "2.x"
 	}
 }
 ```
@@ -66,7 +139,7 @@ directory can later be cleaned with the `make clean` command.
 
 The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 
-[![Build Status](https://travis-ci.org/Icybee/module-users-noncelogin.png?branch=master)](https://travis-ci.org/Icybee/module-users-noncelogin)
+[![Build Status](https://travis-ci.org/Icybee/module-users-noncelogin.svg?branch=2.0)](https://travis-ci.org/Icybee/module-users-noncelogin)
 
 
 
@@ -75,4 +148,12 @@ The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 
 ## License
 
-The module is licensed under the New BSD License - See the LICENSE file for details.
+The module is licensed under the New BSD License - See the [LICENSE](LICENSE) file for details.
+
+
+
+
+
+[icanboogie/mailer]: https://github.com/ICanBoogie/Mailer
+[NonceLoginRequestOperation]: http://icybee.org/docs/class-Icybee.Modules.Users.NonceLogin.NonceLoginRequestOperation.html
+[TicketAlreadySent]: http://icybee.org/docs/class-Icybee.Modules.Users.NonceLogin.TicketAlreadySent.html

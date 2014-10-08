@@ -48,20 +48,9 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 		$ticket->token = str_rot13($ticket->token);
 
 		$request = Request::from(self::$route->format($ticket));
-
-		try
-		{
-			$response = $request();
-
-			$this->fail('The Failure exception should have been thrown.');
-		}
-		catch (\ICanBoogie\Operation\Failure $e)
-		{
-			$response = $e->operation->response;
-
-			$this->assertFalse($response->is_successful);
-			$this->assertNotNull($response->errors['token']);
-		}
+		$response = $request();
+		$this->assertFalse($response->is_successful);
+		$this->assertNotNull($response->errors['token']);
 	}
 
 	public function test_invalid_uid()
@@ -75,20 +64,10 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 		$ticket->expire_at = '+1 hour';
 		$ticket->save();
 
-		try
-		{
-			$request = Request::from(self::$route->format($ticket));
-			$response = $request();
-
-			$this->fail('The Failure exception should have been thrown.');
-		}
-		catch (\ICanBoogie\Operation\Failure $e)
-		{
-			$response = $e->operation->response;
-
-			$this->assertFalse($response->is_successful);
-			$this->assertNotNull($response->errors['uid']);
-		}
+		$request = Request::from(self::$route->format($ticket));
+		$response = $request();
+		$this->assertFalse($response->is_successful);
+		$this->assertNotNull($response->errors['uid']);
 	}
 
 	public function test_expired()
@@ -97,20 +76,10 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 		$ticket->expire_at = '-10 days';
 		$ticket->save();
 
-		try
-		{
-			$request = Request::from(self::$route->format($ticket));
-			$response = $request();
-
-			$this->fail('The Failure exception should have been thrown.');
-		}
-		catch (\ICanBoogie\Operation\Failure $e)
-		{
-			$response = $e->operation->response;
-
-			$this->assertFalse($response->is_successful);
-			$this->assertNotNull($response->errors['expire_at']);
-		}
+		$request = Request::from(self::$route->format($ticket));
+		$response = $request();
+		$this->assertFalse($response->is_successful);
+		$this->assertNotNull($response->errors['expire_at']);
 	}
 
 	public function test_request()
@@ -125,7 +94,7 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 		$response = $request();
 
 		$this->assertTrue($response->is_successful);
-		$this->assertEquals('/admin/profile', $response->location);
+		$this->assertEquals('/url/for/profile', $response->location);
 		$this->assertNotNull($core->user);
 		$this->assertEquals(1, $core->user_id);
 

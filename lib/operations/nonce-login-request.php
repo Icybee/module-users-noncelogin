@@ -12,7 +12,7 @@
 namespace Icybee\Modules\Users\NonceLogin;
 
 use ICanBoogie\DateTime;
-use ICanBoogie\PermissionRequired;
+use ICanBoogie\HTTP\Request;
 
 /**
  * Provides a nonce login.
@@ -23,6 +23,15 @@ use ICanBoogie\PermissionRequired;
  */
 class NonceLoginRequestOperation extends \ICanBoogie\Operation
 {
+	protected function get_controls()
+	{
+		return [
+
+			self::CONTROL_METHOD => Request::METHOD_POST
+
+		] + parent::get_controls();
+	}
+
 	/**
 	 * @todo-20131009: remove this when Operation is cleverer.
 	 */
@@ -128,12 +137,13 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 
 		if ($expire_at && (time() + Module::FRESH_PERIOD - $expire_at->timestamp < Module::COOLOFF_DELAY))
 		{
-			throw new \Exception
+			throw new TicketAlreadySent
 			(
-				$errors->format("nonce_login_request.operation.already_sent", array
-				(
+				$ticket, $errors->format("nonce_login_request.operation.already_sent", [
+
 					':time' => DateTime::from('@' . ($expire_at->timestamp - Module::FRESH_PERIOD + Module::COOLOFF_DELAY), 'utc')->local->format('H:i')
-				)),
+
+				]),
 
 				403
 			);
@@ -183,5 +193,27 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 		]);
 
 		return true;
+	}
+}
+
+/**
+ * Exception thrown in attempt to request a ticket before the end of the cooldown period.
+ */
+class TicketAlreadySent extends \Exception
+{
+	use \ICanBoogie\GetterTrait;
+
+	private $ticket;
+
+	protected function get_ticket()
+	{
+		return $this->ticket;
+	}
+
+	public function __construct(Ticket $ticket, $message, $code=500, \Exception $previous=null)
+	{
+		$this->ticket = $ticket;
+
+		parent::__construct($message, $code, $previous);
 	}
 }
