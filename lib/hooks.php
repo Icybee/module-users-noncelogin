@@ -11,8 +11,9 @@
 
 namespace Icybee\Modules\Users\NonceLogin;
 
-use ICanBoogie\Operation\ProcessEvent;
 use ICanBoogie\I18n\Translator\Proxi;
+use ICanBoogie\Operation\ProcessEvent;
+use ICanBoogie\Operation\GetFormEvent;
 
 class Hooks
 {
@@ -53,5 +54,18 @@ class Hooks
 			])
 
 		], [ 'sender' => $target ]);
+	}
+
+	/**
+	 * Provide the form for the `nonce-login` operation.
+	 *
+	 * The form is an instance of {@link NonceLoginForm}.
+	 *
+	 * @param GetFormEvent $event
+	 * @param NonceLoginOperation $target
+	 */
+	static public function on_nonce_login_get_form(GetFormEvent $event, NonceLoginOperation $target)
+	{
+		$event->form = new NonceLoginForm;
 	}
 }

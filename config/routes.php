@@ -27,5 +27,13 @@ return [
 		'pattern' => '/api/nonce-login/<token:[0-9a-z]{40}>',
 		'controller' => __NAMESPACE__ . '\NonceLoginOperation'
 
+	],
+
+	'nonce-login' => [
+
+		'pattern' => '/nonce-login/<token:[0-9a-z]{40}>',
+		'controller' => __NAMESPACE__ . '\NonceLoginController'
+
 	]
+
 ];
