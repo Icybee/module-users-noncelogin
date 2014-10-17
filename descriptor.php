@@ -3,14 +3,14 @@
 namespace Icybee\Modules\Users\NonceLogin;
 
 use ICanBoogie\ActiveRecord\Model;
-use ICanBoogie\Module;
+use ICanBoogie\Module\Descriptor;
 
 return [
 
-	Module::T_ID => 'users.noncelogin',
-	Module::T_CATEGORY => 'users',
-	Module::T_DESCRIPTION => 'Provides nonce-based password reset process.',
-	Module::T_MODELS => [
+	Descriptor::ID => 'users.noncelogin',
+	Descriptor::CATEGORY => 'users',
+	Descriptor::DESCRIPTION => 'Provides nonce-based password reset process.',
+	Descriptor::MODELS => [
 
 		'primary' => [
 
@@ -32,6 +32,6 @@ return [
 		// TODO-20131007: history ?
 	],
 
-	Module::T_NAMESPACE => __NAMESPACE__,
-	Module::T_TITLE => 'Password Reset'
+	Descriptor::NS => __NAMESPACE__,
+	Descriptor::TITLE => 'Password Reset'
 ];
