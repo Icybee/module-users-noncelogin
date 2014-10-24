@@ -11,7 +11,7 @@
 
 namespace Icybee\Modules\Users\NonceLogin;
 
-use Icybee\Modules\Views\View;
+use Icybee\Modules\Views\ViewOptions;
 
 class Module extends \ICanBoogie\Module
 {
@@ -20,13 +20,14 @@ class Module extends \ICanBoogie\Module
 
 	protected function lazy_get_views()
 	{
-		return array
-		(
-			'nonce_login_request' => array
-			(
-				View::TITLE => 'Nonce login request',
-				View::RENDERS => View::RENDERS_OTHER
-			)
-		);
+		return [
+
+			'nonce_login_request' => [
+
+				ViewOptions::TITLE => "Nonce login request",
+				ViewOptions::RENDERS => ViewOptions::RENDERS_OTHER
+			]
+
+		];
 	}
 }

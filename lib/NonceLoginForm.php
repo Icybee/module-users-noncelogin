@@ -43,14 +43,6 @@ class NonceLoginForm extends Form
 
 			Form::RENDERER => 'Group',
 
-			Form::VALUES => [
-
-				'email' => 'olivier.laviale@gmail.com',
-				'password' => '!monkees:007$',
-				'password-verify' => '!monkees:007$'
-
-			],
-
 			Element::CHILDREN => [
 
 				'email' => new Text([
@@ -85,6 +77,15 @@ class NonceLoginForm extends Form
 		]);
 	}
 
+	public function __sleep()
+	{
+		$rc = parent::__sleep();
+
+		$this->required['token'] = "Token";
+
+		return $rc;
+	}
+
 	public function render()
 	{
 		$ticket = $this[self::TICKET];
@@ -93,4 +94,5 @@ class NonceLoginForm extends Form
 
 		return parent::render();
 	}
+
 }

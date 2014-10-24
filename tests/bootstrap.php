@@ -50,15 +50,21 @@ $core = new Core(\ICanBoogie\array_merge_recursive(\ICanBoogie\get_autoconfig(),
 ]));
 
 $core->session = new FakeSession;
-
 $core->boot();
 
 $errors = $core->modules->install(new Errors);
 
 if ($errors->count())
 {
-	var_dump($errors); exit;
+	foreach ($errors as  $module_id => $message)
+	{
+		echo "$module_id: $message\n";
+	}
 }
+
+#
+# Create a user account
+#
 
 $user = User::from([
 
@@ -68,3 +74,15 @@ $user = User::from([
 ]);
 
 $user->save();
+
+#
+# Fake mailer's mail().
+#
+
+global $mailer_options;
+
+$core->mail = function($options) use(&$mailer_options) {
+
+	$mailer_options = $options;
+
+};

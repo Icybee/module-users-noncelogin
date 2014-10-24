@@ -101,14 +101,14 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 
 		if (!$email)
 		{
-			$errors['email'] = $errors->format('The field %field is required!', array('%field' => 'Votre adresse E-Mail'));
+			$errors['email'] = $errors->format('The field %field is required!', [ '%field' => 'Votre adresse E-Mail' ]);
 
 			return false;
 		}
 
 		if (!filter_var($email, FILTER_VALIDATE_EMAIL))
 		{
-			$errors['email'] = $errors->format("Invalid email address: %email.", array('%email' => $email));
+			$errors['email'] = $errors->format("Invalid email address: %email.", ['%email' => $email ]);
 
 			return false;
 		}
@@ -170,14 +170,14 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 
 		# create new ticket
 
-		$ticket = Ticket::from(array(
+		$ticket = Ticket::from([
 
 			'uid' => $user->uid,
 			'token' => $model->generate_token(),
 			'expire_at' => '+' . Module::FRESH_PERIOD . ' seconds',
 			'ip' => $this->request->ip
 
-		));
+		]);
 
 		$ticket->save();
 
@@ -193,27 +193,5 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 		]);
 
 		return true;
-	}
-}
-
-/**
- * Exception thrown in attempt to request a ticket before the end of the cooldown period.
- */
-class TicketAlreadySent extends \Exception
-{
-	use \ICanBoogie\GetterTrait;
-
-	private $ticket;
-
-	protected function get_ticket()
-	{
-		return $this->ticket;
-	}
-
-	public function __construct(Ticket $ticket, $message, $code=500, \Exception $previous=null)
-	{
-		$this->ticket = $ticket;
-
-		parent::__construct($message, $code, $previous);
 	}
 }

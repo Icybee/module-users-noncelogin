@@ -11,16 +11,16 @@
 
 namespace Icybee\Modules\Users\NonceLogin;
 
-use ICanBoogie\ActiveRecord;
-use ICanBoogie\ActiveRecord\RecordNotFound;
-use ICanBoogie\DateTime;
 use ICanBoogie\Errors;
 use ICanBoogie\HTTP\Request;
-use ICanBoogie\Routing\Controller;
 
 use Brickrouge\Alert;
+use ICanBoogie\HTTP\RedirectResponse;
 
-class NonceLoginController extends Controller
+/**
+ * @property-read Ticket $ticket
+ */
+class NonceLoginController extends \ICanBoogie\Routing\Controller
 {
 	use ValidateToken;
 
@@ -33,20 +33,21 @@ class NonceLoginController extends Controller
 		$errors = new Errors;
 		$this->validate($errors);
 
-		var_dump(\ICanBoogie\Debug::fetch_messages(\ICanBoogie\LogLevel::ERROR));
-
 		if ($errors->count())
 		{
-			return new Alert($errors);
+			foreach ($errors as $message)
+			{
+				\ICanBoogie\log_error($message);
+			}
+
+			return new RedirectResponse(\ICanBoogie\Core::get()->routes['nonce-login-request']);
 		}
 
-		$form = new NonceLoginForm([
+		return new NonceLoginForm([
 
 			NonceLoginForm::TICKET => $this->ticket
 
 		]);
-
-		return $form;
 	}
 
 	private $ticket;

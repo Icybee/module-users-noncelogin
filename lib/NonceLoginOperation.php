@@ -11,28 +11,50 @@
 
 namespace Icybee\Modules\Users\NonceLogin;
 
-use ICanBoogie\ActiveRecord\RecordNotFound;
-use ICanBoogie\DateTime;
-use ICanBoogie\I18n\FormattedString;
-use ICanBoogie\PermissionRequired;
-use ICanBoogie\Errors;
 use ICanBoogie\ActiveRecord;
+use ICanBoogie\Errors;
+use ICanBoogie\I18n\FormattedString;
+use ICanBoogie\HTTP\Request;
 
 /**
  * The "nonce-login" operation is used to login a user using a one time, time limited pass created
  * by the "nonce-request" operation.
+ *
+ * @property-read Ticket $ticket The nonce ticket.
+ * @property-read \Icybee\Modules\Users\User $user The user associated with the ticket.
+ * @property-read string $email The email of the user.
+ * @property-read string $password The new password of the user.
  */
 class NonceLoginOperation extends \ICanBoogie\Operation
 {
 	use ValidateToken;
 
 	private $ticket;
-	private $email;
-	private $password;
 
 	protected function get_ticket()
 	{
 		return $this->ticket;
+	}
+
+	private $email;
+
+	protected function get_email()
+	{
+		return $email;
+	}
+
+	private $password;
+
+	protected function get_password()
+	{
+		return $password;
+	}
+
+	private $user;
+
+	protected function get_user()
+	{
+		return $this->ticket ? $this->ticket->user : null;
 	}
 
 	protected function get_controls()
@@ -65,7 +87,7 @@ class NonceLoginOperation extends \ICanBoogie\Operation
 		->filter_by_email($email)
 		->rc;
 
-		if (!$uid || $uid != $this->ticket->user->uid)
+		if (!$uid || ($this->ticket && $uid != $this->ticket->user->uid))
 		{
 			$errors['email'] = $errors->format("Invalid email address %email", [
 
@@ -90,63 +112,38 @@ class NonceLoginOperation extends \ICanBoogie\Operation
 	{
 		global $core;
 
-		throw new \Exception("disabled");
-
 		$ticket = $this->ticket;
 		$user = $ticket->user;
+		$user->password = $this->password;
+		$user->save();
+
+		$login_request = Request::from([
+
+			'is_post' => true,
+			'uri' => $core->routes['api:login'],
+			'request_params' => [
+
+				'username' => $this->email,
+				'email' => $this->email,
+				'password' => $this->password
+
+			]
+
+		]);
+
+		/* @var $response \ICanBoogie\Operation\Response */
+
+		$response = $login_request();
+
+		if (!$response->is_successful)
+		{
+			throw new \Exception("Unable to login");
+		}
 
 		$ticket->delete();
 
-		$user->login();
-
-		$this->response->location = $user->url('profile');
-		$this->response->message = new FormattedString("You are now logged in, please enter your password.");
-
-		return true;
-	}
-}
-
-trait ValidateToken
-{
-	protected function validate_token($token, Errors $errors, Ticket &$ticket=null)
-	{
-		if (!$token)
-		{
-			$errors['token'] = $errors->format("The nonce login Token is required.");
-
-			return false;
-		}
-
-		$ticket = ActiveRecord\get_model('users.noncelogin')->filter_by_token($token)->one;
-
-		if (!$ticket)
-		{
-			$errors['token'] = $errors->format("Unknown token.");
-
-			return false;
-		}
-
-		if ($ticket->expire_at < DateTime::now())
-		{
-			$errors['expire_at'] = $errors->format("This nonce login ticket has expired at :date.", [
-
-				':date' => $ticket->expire_at->local->as_db
-
-			]);
-
-			return false;
-		}
-
-		try
-		{
-			$ticket->user;
-		}
-		catch (RecordNotFound $e)
-		{
-			$errors['uid'] = $errors->format("The user associated with this nonce login no longer exists.");
-
-			return false;
-		}
+		$this->response->location = $response->location ?: '/';
+		$this->response->message = new FormattedString("Your password has been updated and you are now logged in.");
 
 		return true;
 	}

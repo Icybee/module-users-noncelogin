@@ -24,24 +24,26 @@
 	"require": {
 		"php": ">=5.4.0",
 		"icanboogie/module-installer": "*",
-		"icanboogie/activerecord": "2.x",
+		"icanboogie/activerecord": ">=2.1.0",
 		"icanboogie/operation": "2.x",
-		"icybee/module-users": "2.x"
+		"icybee/module-users": "2.x",
+		"icybee/module-registry": "*"
 	},
 
 	"require-dev": {
 		"icanboogie/icanboogie": "2.x",
 		"icanboogie/i18n": "2.x",
+		"brickrouge/brickrouge": "2.x",
 		"icybee/core": "*"
 	},
 
 	"autoload": {
-		"classmap": [ "lib" ]
+		"psr-4": { "Icybee\\Modules\\Users\\NonceLogin\\": "lib" }
 	},
 
 	"scripts": {
 
-		"post-autoload-dump": "ICanBoogie\\AutoConfig\\Generator::on_autoload_dump"
+		"post-autoload-dump": "ICanBoogie\\AutoConfig\\Hooks::on_autoload_dump"
 
 	}
 }

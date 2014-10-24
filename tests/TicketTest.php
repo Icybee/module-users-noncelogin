@@ -56,18 +56,48 @@ class RecordTest extends \PHPUnit_Framework_TestCase
 		$this->assertArrayHasKey('expire_at', $properties);
 		$array = $t->to_array();
 		$this->assertArrayHasKey('expire_at', $array);
+
+		# automatic expire_at
+
+		$t = Ticket::from([
+
+			'uid' => 1,
+			'ip' => '::1'
+
+		]);
+
+		$t->save();
+
+		$this->assertEquals(Ticket::FRESH_PERIOD, $t->expire_at->timestamp - DateTime::now()->timestamp);
+
+		$t->delete();
+	}
+
+	public function test_token()
+	{
+		$ticket = Ticket::from([
+
+			'uid' => 1,
+			'ip' => '::1'
+
+		]);
+
+		$this->assertEmpty($ticket->token);
+		$ticket->save();
+		$this->assertNotEmpty($ticket->token);
+		$ticket->delete();
 	}
 
 	public function test_update()
 	{
-		$t = Ticket::from(array(
+		$t = Ticket::from([
 
 			'token' => self::$model->generate_token(),
 			'uid' => 1,
 			'expire_at' => '+1 hour',
 			'ip' => '::1'
 
-		));
+		]);
 
 		$rc = $t->save();
 
@@ -80,18 +110,20 @@ class RecordTest extends \PHPUnit_Framework_TestCase
 
 		$record = self::$model->one;
 		$this->assertEquals($t->ip, $record->ip);
+
+		$t->delete();
 	}
 
 	public function test_belong_to_user()
 	{
-		$t = Ticket::from(array(
+		$t = Ticket::from([
 
 			'token' => self::$model->generate_token(),
 			'uid' => 1,
 			'expire_at' => '+1 hour',
 			'ip' => '::1'
 
-		));
+		]);
 
 		$user = $t->user;
 		$this->assertInstanceOf('Icybee\Modules\Users\User', $user);

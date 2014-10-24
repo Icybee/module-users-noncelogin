@@ -17,10 +17,14 @@ use ICanBoogie\DateTime;
 /**
  * Representation of a password request.
  *
+ * @property-read TicketModel $model
  * @property DateTime|mixed $expire_at Date at which the ticket expires.
  */
 class Ticket extends ActiveRecord
 {
+	const MODEL_ID = 'users.noncelogin';
+	const FRESH_PERIOD = 3600;
+
 	/**
 	 * Ticket identifier.
 	 *
@@ -77,10 +81,21 @@ class Ticket extends ActiveRecord
 	}
 
 	/**
-	 * @param string $model Defaults to `users.noncelogin`.
+	 * A token is obtained from the model if {@link $token} is empty. {@link $expire_at} is set
+	 * to `time() + FRESH_PERIOD` if it is empty.
 	 */
-	public function __construct($model='users.noncelogin')
+	public function save()
 	{
-		parent::__construct($model);
+		if (!$this->token)
+		{
+			$this->token = $this->model->generate_token();
+		}
+
+		if ($this->get_expire_at()->is_empty)
+		{
+			$this->set_expire_at('@' . (time() + self::FRESH_PERIOD));
+		}
+
+		return parent::save();
 	}
 }

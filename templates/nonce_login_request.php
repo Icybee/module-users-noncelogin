@@ -2,7 +2,7 @@
 
 namespace Icybee\Modules\Users\NonceLogin;
 
-$form = new NonceRequestForm();
+$form = new NonceLoginRequestForm;
 $form->add_class('form-inline');
 
 echo $form;

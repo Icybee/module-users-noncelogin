@@ -18,6 +18,7 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 	static private $model;
 	static private $route;
 	static private $ticket;
+	static private $request_attributes;
 
 	static public function setupBeforeClass()
 	{
@@ -32,42 +33,238 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 
 		# create nonce login ticket
 
-		$ticket = new Ticket;
-		$ticket->token = $model->generate_token();
-		$ticket->uid = 1;
-		$ticket->ip = $core->request->ip;
-		$ticket->expire_at = '+1 hour';
+		$ticket = Ticket::from([
+
+			'uid' => 1,
+			'ip' => $core->request->ip
+
+		]);
+
 		$ticket->save();
 
 		self::$ticket = $ticket;
+
+		self::$request_attributes = [
+
+			'is_xhr' => true,
+			'is_post' => true,
+			'uri' => self::$route,
+			'request_params' => [
+
+				'token' => $ticket->token,
+				'email' => "olivier.laviale@gmail.com",
+				'password' => "P4SSW0RD",
+				'password-verify' => "P4SSW0RD"
+
+			]
+		];
+	}
+
+	public function test_empty()
+	{
+		$request_attributes = self::$request_attributes;
+
+		unset($request_attributes['request_params']);
+
+		$request = Request::from($request_attributes);
+
+		#
+		# instance
+		#
+
+		$operation = new NonceLoginOperation;
+
+		try
+		{
+			$response = $operation($request);
+
+			$this->fail("Expected Failure exception.");
+		}
+		catch (\Exception $e)
+		{
+			$this->assertInstanceOf('ICanBoogie\Operation\Failure', $e);
+
+			$errors = $e->operation->response->errors;
+
+			$this->assertNotNull($errors['token']);
+			$this->assertNotNull($errors['email']);
+			$this->assertNotNull($errors['password']);
+			$this->assertNotNull($errors['password-verify']);
+		}
+
+		#
+		# dispatch
+		#
+
+		$response = $request();
+
+		$this->assertFalse($response->is_successful);
+
+		$errors = $response->errors;
+
+		$this->assertNotNull($errors['token']);
+		$this->assertNotNull($errors['email']);
+		$this->assertNotNull($errors['password']);
+		$this->assertNotNull($errors['password-verify']);
 	}
 
 	public function test_invalid_token()
 	{
-		$ticket = clone self::$ticket;
-		$ticket->token = str_rot13($ticket->token);
+		$request_attributes = self::$request_attributes;
+		$request_attributes['request_params']['token'] = str_rot13(self::$ticket->token);
 
-		$request = Request::from(self::$route->format($ticket));
+		$request = Request::from($request_attributes);
+
+		#
+		# instance
+		#
+
+		$operation = new NonceLoginOperation;
+
+		try
+		{
+			$response = $operation($request);
+
+			$this->fail("Expected Failure exception.");
+		}
+		catch (\Exception $e)
+		{
+			$this->assertInstanceOf('ICanBoogie\Operation\Failure', $e);
+
+			$errors = $e->operation->response->errors;
+
+			$this->assertNotNull($errors['token']);
+			$this->assertNull($errors['email']);
+			$this->assertNull($errors['password']);
+			$this->assertNull($errors['password-verify']);
+		}
+
+		#
+		# dispatch
+		#
+
 		$response = $request();
+
 		$this->assertFalse($response->is_successful);
-		$this->assertNotNull($response->errors['token']);
+
+		$errors = $response->errors;
+
+		$this->assertNotNull($errors['token']);
+		$this->assertNull($errors['email']);
+		$this->assertNull($errors['password']);
+		$this->assertNull($errors['password-verify']);
 	}
 
-	public function test_invalid_uid()
+	public function test_invalid_email()
+	{
+		$request_attributes = self::$request_attributes;
+		$request_attributes['request_params']['email'] = str_rot13($request_attributes['request_params']['email']);
+
+		$request = Request::from($request_attributes);
+
+		#
+		# instance
+		#
+
+		$operation = new NonceLoginOperation;
+
+		try
+		{
+			$response = $operation($request);
+
+			$this->fail("Expected Failure exception.");
+		}
+		catch (\Exception $e)
+		{
+			$this->assertInstanceOf('ICanBoogie\Operation\Failure', $e);
+
+			$errors = $e->operation->response->errors;
+
+			$this->assertNull($errors['token']);
+			$this->assertNotNull($errors['email']);
+			$this->assertNull($errors['password']);
+			$this->assertNull($errors['password-verify']);
+		}
+
+		#
+		# dispatch
+		#
+
+		$response = $request();
+
+		$this->assertFalse($response->is_successful);
+
+		$errors = $response->errors;
+
+		$this->assertNull($errors['token']);
+		$this->assertNotNull($errors['email']);
+		$this->assertNull($errors['password']);
+		$this->assertNull($errors['password-verify']);
+	}
+
+	public function test_invalid_passwords()
+	{
+		$request_attributes = self::$request_attributes;
+		$request_attributes['request_params']['password'] = str_rot13($request_attributes['request_params']['password']);
+
+		$request = Request::from($request_attributes);
+
+		#
+		# instance
+		#
+
+		$operation = new NonceLoginOperation;
+
+		try
+		{
+			$response = $operation($request);
+
+			$this->fail("Expected Failure exception.");
+		}
+		catch (\Exception $e)
+		{
+			$this->assertInstanceOf('ICanBoogie\Operation\Failure', $e);
+
+			$errors = $e->operation->response->errors;
+
+			$this->assertNull($errors['token']);
+			$this->assertNull($errors['email']);
+			$this->assertNotNull($errors['password']);
+			$this->assertNull($errors['password-verify']);
+		}
+
+		#
+		# dispatch
+		#
+
+		$response = $request();
+
+		$this->assertFalse($response->is_successful);
+
+		$errors = $response->errors;
+
+		$this->assertNull($errors['token']);
+		$this->assertNull($errors['email']);
+		$this->assertNotNull($errors['password']);
+		$this->assertNull($errors['password-verify']);
+	}
+
+	public function test_request()
 	{
 		global $core;
 
-		$ticket = new Ticket;
-		$ticket->token = self::$model->generate_token();
-		$ticket->uid = 999;
-		$ticket->ip = $core->request->ip;
-		$ticket->expire_at = '+1 hour';
-		$ticket->save();
-
-		$request = Request::from(self::$route->format($ticket));
+		$request = Request::from(self::$request_attributes);
 		$response = $request();
-		$this->assertFalse($response->is_successful);
-		$this->assertNotNull($response->errors['uid']);
+
+		$this->assertTrue($response->is_successful);
+		$this->assertNotEmpty($response['redirect_to']);
+		$this->assertNotNull($core->user);
+		$this->assertEquals(1, $core->user_id);
+
+		// the ticket for the user must be destroyed.
+		$ticket = self::$ticket;
+		$ticket = $core->models['users.noncelogin']->filter_by_uid($ticket->uid)->one;
+		$this->assertEmpty($ticket);
 	}
 
 	public function test_expired()
@@ -76,30 +273,45 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 		$ticket->expire_at = '-10 days';
 		$ticket->save();
 
-		$request = Request::from(self::$route->format($ticket));
+		$request = Request::from(self::$request_attributes);
+
+		#
+		# instance
+		#
+
+		$operation = new NonceLoginOperation;
+
+		try
+		{
+			$response = $operation($request);
+
+			$this->fail("Expected Failure exception.");
+		}
+		catch (\Exception $e)
+		{
+			$this->assertInstanceOf('ICanBoogie\Operation\Failure', $e);
+
+			$errors = $e->operation->response->errors;
+
+			$this->assertNotNull($errors['token']);
+			$this->assertNull($errors['email']);
+			$this->assertNull($errors['password']);
+			$this->assertNull($errors['password-verify']);
+		}
+
+		#
+		# dispatch
+		#
+
 		$response = $request();
+
 		$this->assertFalse($response->is_successful);
-		$this->assertNotNull($response->errors['expire_at']);
-	}
 
-	public function test_request()
-	{
-		global $core;
+		$errors = $response->errors;
 
-		$ticket = self::$ticket;
-		$ticket->expire_at = '+1 hour';
-		$ticket->save();
-
-		$request = Request::from(self::$route->format(self::$ticket));
-		$response = $request();
-
-		$this->assertTrue($response->is_successful);
-		$this->assertEquals('/url/for/profile', $response->location);
-		$this->assertNotNull($core->user);
-		$this->assertEquals(1, $core->user_id);
-
-		// the ticket for the user must be destroyed.
-		$ticket = $core->models['users.noncelogin']->filter_by_uid($ticket->uid)->one;
-		$this->assertFalse($ticket);
+		$this->assertNotNull($errors['token']);
+		$this->assertNull($errors['email']);
+		$this->assertNull($errors['password']);
+		$this->assertNull($errors['password-verify']);
 	}
 }

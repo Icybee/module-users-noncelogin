@@ -30,9 +30,10 @@ class Hooks
 		$user = $target->user;
 		$ticket = $target->ticket;
 
-		$route = $core->routes['api:nonce-login'];
-		$url = $route->format($ticket)->absolute_url;
-		$until = $ticket->expire_at->local->format('H:i');
+		$url = $core->routes['nonce-login']->format($ticket)->absolute_url;
+		$local_expire_at = $ticket->expire_at->local;
+		$until = $local_expire_at->format('H:i');
+		$utc_relative = $local_expire_at->format('P');
 
 		$t = new Proxi([
 
@@ -47,9 +48,10 @@ class Hooks
 			'subject' => $t('message.subject'),
 			'body' => $t('message.template', [
 
-				':url' => $url,
-				':until' => $until,
-				':ip' => $event->request->ip
+				'url' => $url,
+				'until' => $until,
+				'utc_relative' => $utc_relative,
+				'ip' => $event->request->ip
 
 			])
 
