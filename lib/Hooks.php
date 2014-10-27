@@ -62,9 +62,8 @@ class Hooks
 	 * The form is an instance of {@link NonceLoginForm}.
 	 *
 	 * @param GetFormEvent $event
-	 * @param NonceLoginOperation $target
 	 */
-	static public function on_nonce_login_get_form(GetFormEvent $event, NonceLoginOperation $target)
+	static public function on_nonce_login_get_form(GetFormEvent $event)
 	{
 		$event->form = new NonceLoginForm;
 	}

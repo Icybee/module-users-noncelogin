@@ -50,8 +50,6 @@ class NonceLoginOperation extends \ICanBoogie\Operation
 		return $password;
 	}
 
-	private $user;
-
 	protected function get_user()
 	{
 		return $this->ticket ? $this->ticket->user : null;
