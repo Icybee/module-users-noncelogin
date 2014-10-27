@@ -25,12 +25,10 @@ class Hooks
 	 */
 	static public function on_nonce_login_request(ProcessEvent $event, NonceLoginRequestOperation $target)
 	{
-		global $core;
-
 		$user = $target->user;
 		$ticket = $target->ticket;
-
-		$url = $core->routes['nonce-login']->format($ticket)->absolute_url;
+		$app = \ICanBoogie\app();
+		$url = $app->routes['nonce-login']->format($ticket)->absolute_url;
 		$local_expire_at = $ticket->expire_at->local;
 		$until = $local_expire_at->format('H:i');
 		$utc_relative = $local_expire_at->format('P');
@@ -41,7 +39,7 @@ class Hooks
 
 		]);
 
-		$core->mail([
+		$app->mail([
 
 			'to' => $user->email,
 			'from' => 'no-reply@' . $_SERVER['HTTP_HOST'],

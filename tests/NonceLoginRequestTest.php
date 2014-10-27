@@ -17,9 +17,7 @@ class NonceLoginRequestTest extends \PHPUnit_Framework_TestCase
 {
 	static public function setupBeforeClass()
 	{
-		global $core;
-
-		$core->models['users.noncelogin']->truncate();
+		\ICanBoogie\app()->models['users.noncelogin']->truncate();
 	}
 
 	public function test_invalid_email_address()
@@ -53,7 +51,7 @@ class NonceLoginRequestTest extends \PHPUnit_Framework_TestCase
 
 	public function test_request()
 	{
-		global $core, $mailer_options;
+		global $mailer_options;
 
 		$mailer_options = null;
 
@@ -77,7 +75,7 @@ class NonceLoginRequestTest extends \PHPUnit_Framework_TestCase
 		$this->assertArrayHasKey('to', $mailer_options);
 		$this->assertEquals($operation->user->email, $mailer_options['to']);
 		$this->assertArrayHasKey('body', $mailer_options);
-		$this->assertTrue(strpos($mailer_options['body'], $core->routes['nonce-login']->format($operation->ticket)->absolute_url) !== false);
+		$this->assertTrue(strpos($mailer_options['body'], \ICanBoogie\app()->routes['nonce-login']->format($operation->ticket)->absolute_url) !== false);
 	}
 
 	/**
@@ -117,11 +115,9 @@ class NonceLoginRequestTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function test_multiple_request_dispatch()
 	{
-		global $core;
-
 		$request = Request::from([
 
-			'uri' => $core->routes['api:nonce-login-request'],
+			'uri' => \ICanBoogie\app()->routes['api:nonce-login-request'],
 			'request_params' => [ 'email' => 'olivier.laviale@gmail.com' ],
 			'is_post' => true,
 			'is_xhr' => true

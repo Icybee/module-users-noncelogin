@@ -22,21 +22,21 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 
 	static public function setupBeforeClass()
 	{
-		global $core;
+		$app = \ICanBoogie\app();
 
-		self::$model = $model = $core->models['users.noncelogin'];
+		self::$model = $model = $app->models['users.noncelogin'];
 		$model->truncate();
 
 		# route
 
-		self::$route = $core->routes['api:nonce-login'];
+		self::$route = $app->routes['api:nonce-login'];
 
 		# create nonce login ticket
 
 		$ticket = Ticket::from([
 
 			'uid' => 1,
-			'ip' => $core->request->ip
+			'ip' => $app->request->ip
 
 		]);
 
@@ -251,19 +251,19 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 
 	public function test_request()
 	{
-		global $core;
+		$app = \ICanBoogie\app();
 
 		$request = Request::from(self::$request_attributes);
 		$response = $request();
 
 		$this->assertTrue($response->is_successful);
 		$this->assertNotEmpty($response['redirect_to']);
-		$this->assertNotNull($core->user);
-		$this->assertEquals(1, $core->user_id);
+		$this->assertNotNull($app->user);
+		$this->assertEquals(1, $app->user_id);
 
 		// the ticket for the user must be destroyed.
 		$ticket = self::$ticket;
-		$ticket = $core->models['users.noncelogin']->filter_by_uid($ticket->uid)->one;
+		$ticket = $app->models['users.noncelogin']->filter_by_uid($ticket->uid)->one;
 		$this->assertEmpty($ticket);
 	}
 

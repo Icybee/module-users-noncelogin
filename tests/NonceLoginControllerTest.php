@@ -17,18 +17,18 @@ class NonceLoginControllerTest extends \PHPUnit_Framework_TestCase
 {
 	public function test_valid_token()
 	{
-		global $core;
+		$app = \ICanBoogie\app();
 
 		$ticket = Ticket::from([
 
 			'uid' => 1,
-			'ip' => $core->request->ip
+			'ip' => $app->request->ip
 
 		]);
 
 		$ticket->save();
 
-		$route = $core->routes['nonce-login'];
+		$route = $app->routes['nonce-login'];
 
 		$request = Request::from([
 
@@ -47,18 +47,18 @@ class NonceLoginControllerTest extends \PHPUnit_Framework_TestCase
 
 	public function test_invalid_token()
 	{
-		global $core;
+		$app = \ICanBoogie\app();
 
 		$ticket = Ticket::from([
 
 			'uid' => 1,
-			'ip' => $core->request->ip
+			'ip' => $app->request->ip
 
 		]);
 
 		$ticket->save();
 
-		$route = $core->routes['nonce-login'];
+		$route = $app->routes['nonce-login'];
 
 		$request = Request::from([
 
@@ -70,6 +70,6 @@ class NonceLoginControllerTest extends \PHPUnit_Framework_TestCase
 		$response = $request();
 
 		$this->assertInstanceOf('ICanBoogie\HTTP\RedirectResponse', $response);
-		$this->assertEquals((string) $core->routes['nonce-login-request'], (string) $response->location);
+		$this->assertEquals((string) $app->routes['nonce-login-request'], (string) $response->location);
 	}
 }

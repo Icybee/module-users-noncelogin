@@ -19,11 +19,9 @@
 		"source": "https://github.com/Icybee/module-users-noncelogin"
 	},
 
-	"minimum-stability": "dev",
-
 	"require": {
 		"php": ">=5.4.0",
-		"icanboogie/module-installer": "*",
+		"icanboogie/module-installer": "~1.2",
 		"icanboogie/activerecord": "~2.1",
 		"icanboogie/i18n": "~2.0",
 		"icybee/module-users": "~2.0",
@@ -31,7 +29,7 @@
 	},
 
 	"require-dev": {
-		"brickrouge/brickrouge": "2.x",
+		"brickrouge/brickrouge": "~2.1",
 		"icanboogie/icanboogie": "~2.0"
 	},
 

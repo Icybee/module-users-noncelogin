@@ -68,8 +68,6 @@ class NonceLoginOperation extends \ICanBoogie\Operation
 
 	protected function validate(\ICanboogie\Errors $errors)
 	{
-		global $core;
-
 		$request = $this->request;
 
 		# token
@@ -110,8 +108,6 @@ class NonceLoginOperation extends \ICanBoogie\Operation
 
 	protected function process()
 	{
-		global $core;
-
 		$ticket = $this->ticket;
 		$user = $ticket->user;
 		$user->password = $this->password;
@@ -120,7 +116,7 @@ class NonceLoginOperation extends \ICanBoogie\Operation
 		$login_request = Request::from([
 
 			'is_post' => true,
-			'uri' => $core->routes['api:login'],
+			'uri' => \ICanBoogie\app()->routes['api:login'],
 			'request_params' => [
 
 				'username' => $this->email,

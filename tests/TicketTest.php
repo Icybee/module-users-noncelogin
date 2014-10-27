@@ -19,9 +19,7 @@ class RecordTest extends \PHPUnit_Framework_TestCase
 
 	static public function setupBeforeClass()
 	{
-		global $core;
-
-		self::$model = $core->models['users.noncelogin'];
+		self::$model = \ICanBoogie\app()->models['users.noncelogin'];
 		self::$model->truncate();
 	}
 

@@ -37,11 +37,9 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 	 */
 	public function __construct($request=null)
 	{
-		global $core;
-
 		parent::__construct($request);
 
-		$this->module = $core->modules['users.noncelogin'];
+		$this->module = \ICanBoogie\app()->modules['users.noncelogin'];
 	}
 
 	/**
@@ -51,8 +49,6 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 	 */
 	protected function lazy_get_record()
 	{
-		global $core;
-
 		$email = $this->request['email'];
 
 		if (!$email)
@@ -60,7 +56,7 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 			return;
 		}
 
-		$model = $core->models['users'];
+		$model = \ICanBoogie\app()->models['users'];
 		$uid = $model->select('uid')->filter_by_email($email)->rc;
 
 		if (!$uid)
@@ -95,8 +91,6 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 
 	protected function validate(\ICanboogie\Errors $errors)
 	{
-		global $core;
-
 		$email = $this->request['email'];
 
 		if (!$email)
@@ -124,7 +118,7 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 
 		if ($user->language)
 		{
-			$core->locale = $user->language;
+			\ICanBoogie\app()->locale = $user->language;
 		}
 
 		$expire_at = null;
@@ -159,8 +153,6 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 	 */
 	protected function process()
 	{
-		global $core;
-
 		$user = $this->record;
 		$model = $this->module->model;
 
