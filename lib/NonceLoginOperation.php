@@ -13,7 +13,6 @@ namespace Icybee\Modules\Users\NonceLogin;
 
 use ICanBoogie\ActiveRecord;
 use ICanBoogie\Errors;
-use ICanBoogie\I18n\FormattedString;
 use ICanBoogie\HTTP\Request;
 
 /**
@@ -137,7 +136,7 @@ class NonceLoginOperation extends \ICanBoogie\Operation
 		$ticket->delete();
 
 		$this->response->location = $response->location ?: '/';
-		$this->response->message = new FormattedString("Your password has been updated and you are now logged in.");
+		$this->response->message = $this->format("Your password has been updated and you are now logged in.");
 
 		return true;
 	}
