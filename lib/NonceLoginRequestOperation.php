@@ -39,7 +39,7 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 	{
 		parent::__construct($request);
 
-		$this->module = \ICanBoogie\app()->modules['users.noncelogin'];
+		$this->module = $this->app->modules['users.noncelogin'];
 	}
 
 	/**
@@ -56,7 +56,7 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 			return;
 		}
 
-		$model = \ICanBoogie\app()->models['users'];
+		$model = $this->app->models['users'];
 		$uid = $model->select('uid')->filter_by_email($email)->rc;
 
 		if (!$uid)
@@ -118,7 +118,7 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 
 		if ($user->language)
 		{
-			\ICanBoogie\app()->locale = $user->language;
+			$this->app->locale = $user->language;
 		}
 
 		$expire_at = null;
