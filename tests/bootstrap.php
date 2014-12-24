@@ -31,7 +31,7 @@ class FakeSession extends \ICanBoogie\Session
 	{
 	}
 
-	public function regenerate_id()
+	public function regenerate_id($delete_old_session=false)
 	{
 	}
 
@@ -40,19 +40,17 @@ class FakeSession extends \ICanBoogie\Session
 	}
 }
 
-global $core;
-
-$core = new Core(\ICanBoogie\array_merge_recursive(\ICanBoogie\get_autoconfig(), [
+$app = new Core(\ICanBoogie\array_merge_recursive(\ICanBoogie\get_autoconfig(), [
 
 	'config-path' => [ __DIR__ . DIRECTORY_SEPARATOR . 'config' => 10 ],
 	'module-path' => [ dirname(__DIR__) ]
 
 ]));
 
-$core->session = new FakeSession;
-$core->boot();
+$app->session = new FakeSession;
+$app->boot();
 
-$errors = $core->modules->install(new Errors);
+$errors = $app->modules->install(new Errors);
 
 if ($errors->count())
 {
@@ -81,7 +79,7 @@ $user->save();
 
 global $mailer_options;
 
-$core->mail = function($options) use(&$mailer_options) {
+$app->mail = function($options) use(&$mailer_options) {
 
 	$mailer_options = $options;
 
