@@ -11,12 +11,14 @@
 
 namespace Icybee\Modules\Users\NonceLogin;
 
+use ICanBoogie\Accessor\AccessorTrait;
+
 /**
  * Exception thrown in attempt to request a ticket before the end of the cooldown period.
  */
 class TicketAlreadySent extends \Exception
 {
-	use \ICanBoogie\GetterTrait;
+	use AccessorTrait;
 
 	private $ticket;
 

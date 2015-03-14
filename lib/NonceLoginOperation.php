@@ -113,7 +113,7 @@ class NonceLoginOperation extends \ICanBoogie\Operation
 		$login_request = Request::from([
 
 			'is_post' => true,
-			'uri' => \ICanBoogie\app()->routes['api:login'],
+			'uri' => $this->app->routes['api:login'],
 			'request_params' => [
 
 				'username' => $this->email,
