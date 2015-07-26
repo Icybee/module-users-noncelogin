@@ -19,13 +19,11 @@ return [
 			Model::CLASSNAME => __NAMESPACE__ . '\TicketModel',
 			Model::SCHEMA => [
 
-				'fields' => [
+				'token' => [ 'char', 40, 'charset' => 'ascii/bin', 'primary' => true ],
+				'uid' => [ 'foreign', 'charset' => 'ascii/bin', 'unique' => true ],
+				'ip' => [ 'varchar', 'charset' => 'ascii/bin', 40 ],
+				'expire_at' => 'timestamp'
 
-					'token' => [ 'char', 40, 'charset' => 'ascii/bin', 'primary' => true ],
-					'uid' => [ 'foreign', 'charset' => 'ascii/bin', 'unique' => true ],
-					'ip' => [ 'varchar', 'charset' => 'ascii/bin', 40 ],
-					'expire_at' => 'timestamp'
-				]
 			]
 		]
 
@@ -33,5 +31,6 @@ return [
 	],
 
 	Descriptor::NS => __NAMESPACE__,
-	Descriptor::TITLE => 'Password Reset'
+	Descriptor::TITLE => "Password Reset"
+
 ];
