@@ -11,22 +11,24 @@
 
 namespace Icybee\Modules\Users\NonceLogin;
 
+use ICanBoogie\Binding\Routing\ForwardUndefinedPropertiesToApplication;
 use ICanBoogie\Errors;
 use ICanBoogie\HTTP\Request;
 
-use Brickrouge\Alert;
 use ICanBoogie\HTTP\RedirectResponse;
+use ICanBoogie\Routing\Controller;
 
 /**
  * @property-read Ticket $ticket
  */
-class NonceLoginController extends \ICanBoogie\Routing\Controller
+class NonceLoginController extends Controller
 {
 	use ValidateToken;
+	use ForwardUndefinedPropertiesToApplication;
 
 	protected $request;
 
-	public function __invoke(Request $request)
+	public function action(Request $request)
 	{
 		$this->request = $request;
 
@@ -40,7 +42,7 @@ class NonceLoginController extends \ICanBoogie\Routing\Controller
 				\ICanBoogie\log_error($message);
 			}
 
-			return new RedirectResponse(\ICanBoogie\Core::get()->routes['nonce-login-request']);
+			return new RedirectResponse($this->routes['nonce-login-request']);
 		}
 
 		return new NonceLoginForm([
@@ -57,7 +59,7 @@ class NonceLoginController extends \ICanBoogie\Routing\Controller
 		return $this->ticket;
 	}
 
-	protected function validate(\ICanboogie\Errors $errors)
+	protected function validate(Errors $errors)
 	{
 		$this->validate_token($this->request['token'], $errors, $this->ticket);
 

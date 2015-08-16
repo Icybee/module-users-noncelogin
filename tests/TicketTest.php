@@ -12,9 +12,13 @@
 namespace Icybee\Modules\Users\NonceLogin;
 
 use ICanBoogie\DateTime;
+use Icybee\Modules\Users\User;
 
 class RecordTest extends \PHPUnit_Framework_TestCase
 {
+	/**
+	 * @var TicketModel
+	 */
 	static private $model;
 
 	static public function setupBeforeClass()
@@ -27,14 +31,15 @@ class RecordTest extends \PHPUnit_Framework_TestCase
 	{
 		$t = new Ticket;
 		$d = $t->expire_at;
-		$this->assertInstanceOf('ICanBoogie\DateTime', $d);
+		$this->assertInstanceOf(DateTime::class, $d);
 		$this->assertTrue($d->is_empty);
 		$this->assertEquals('UTC', $d->zone->name);
 		$this->assertEquals('0000-00-00 00:00:00', $d->as_db);
 
 		$t->expire_at = '2013-03-07 18:30:45';
+		/* @var $d DateTime */
 		$d = $t->expire_at;
-		$this->assertInstanceOf('ICanBoogie\DateTime', $d);
+		$this->assertInstanceOf(DateTime::class, $d);
 		$this->assertFalse($d->is_empty);
 		$this->assertEquals('UTC', $d->zone->name);
 		$this->assertEquals('2013-03-07 18:30:45', $d->as_db);
@@ -97,15 +102,16 @@ class RecordTest extends \PHPUnit_Framework_TestCase
 
 		]);
 
-		$rc = $t->save();
+		$this->assertNotEmpty($t->save());
 
 		$this->assertEquals(1, self::$model->count);
 
 		$t->ip = '192.168.0.1';
-		$rc = $t->save();
+		$this->assertNotEmpty($t->save());
 
 		$this->assertEquals(1, self::$model->count);
 
+		/* @var $record Ticket */
 		$record = self::$model->one;
 		$this->assertEquals($t->ip, $record->ip);
 
@@ -124,7 +130,7 @@ class RecordTest extends \PHPUnit_Framework_TestCase
 		]);
 
 		$user = $t->user;
-		$this->assertInstanceOf('Icybee\Modules\Users\User', $user);
+		$this->assertInstanceOf(User::class, $user);
 		$this->assertEquals('olivier.laviale@gmail.com', $user->email);
 	}
 }

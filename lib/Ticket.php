@@ -18,7 +18,7 @@ use ICanBoogie\DateTime;
  * Representation of a password request.
  *
  * @property-read TicketModel $model
- * @property DateTime|mixed $expire_at Date at which the ticket expires.
+ * @property DateTime $expire_at Date at which the ticket expires.
  */
 class Ticket extends ActiveRecord
 {
@@ -56,7 +56,7 @@ class Ticket extends ActiveRecord
 	/**
 	 * Returns the expire date.
 	 *
-	 * @return \ICanBoogie\DateTime
+	 * @return DateTime
 	 */
 	protected function get_expire_at()
 	{
@@ -73,7 +73,7 @@ class Ticket extends ActiveRecord
 	/**
 	 * Sets the expire date.
 	 *
-	 * @param mixed $value
+	 * @param mixed $datetime
 	 */
 	protected function set_expire_at($datetime)
 	{

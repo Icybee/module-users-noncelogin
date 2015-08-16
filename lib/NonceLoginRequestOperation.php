@@ -12,16 +12,20 @@
 namespace Icybee\Modules\Users\NonceLogin;
 
 use ICanBoogie\DateTime;
+use ICanBoogie\Errors;
 use ICanBoogie\HTTP\Request;
+use ICanBoogie\Operation;
+use Icybee\Modules\Users\User;
 
 /**
  * Provides a nonce login.
  *
- * @property-read \Icybee\Modules\Users\User $user The user for which a ticket should be created.
+ * @property-read User $user The user for which a ticket should be created.
  * Alias for {@link $record}.
+ * @property-read User $record
  * @property-read Ticket $ticket The ticket created by the operation.
  */
-class NonceLoginRequestOperation extends \ICanBoogie\Operation
+class NonceLoginRequestOperation extends Operation
 {
 	protected function get_controls()
 	{
@@ -34,8 +38,10 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 
 	/**
 	 * @todo-20131009: remove this when Operation is cleverer.
+	 *
+	 * @inheritdoc
 	 */
-	public function __construct($request=null)
+	public function __construct($request = null)
 	{
 		parent::__construct($request);
 
@@ -43,9 +49,9 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 	}
 
 	/**
-	 * Returns the record assocaiated with the email address specified by the `email` param.
+	 * Returns the record associated with the email address specified by the `email` param.
 	 *
-	 * @return \Icybee\Modules\Users\User|null
+	 * @return User|null
 	 */
 	protected function lazy_get_record()
 	{
@@ -53,7 +59,7 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 
 		if (!$email)
 		{
-			return;
+			return null;
 		}
 
 		$model = $this->app->models['users'];
@@ -61,7 +67,7 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 
 		if (!$uid)
 		{
-			return;
+			return null;
 		}
 
 		return $model[$uid];
@@ -70,7 +76,7 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 	/**
 	 * Returns the user for which a ticket should be created.
 	 *
-	 * @return \Icybee\Modules\Users\User
+	 * @return User
 	 */
 	protected function get_user()
 	{
@@ -89,7 +95,7 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 		return $this->ticket;
 	}
 
-	protected function validate(\ICanboogie\Errors $errors)
+	protected function validate(Errors $errors)
 	{
 		$email = $this->request['email'];
 
@@ -153,6 +159,8 @@ class NonceLoginRequestOperation extends \ICanBoogie\Operation
 	 */
 	protected function process()
 	{
+		/* @var $model TicketModel */
+
 		$user = $this->record;
 		$model = $this->module->model;
 

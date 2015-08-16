@@ -12,11 +12,19 @@
 namespace Icybee\Modules\Users\NonceLogin;
 
 use ICanBoogie\HTTP\Request;
+use ICanBoogie\Operation\Failure;
 
 class NonceLoginTest extends \PHPUnit_Framework_TestCase
 {
+	/**
+	 * @var TicketModel
+	 */
 	static private $model;
 	static private $route;
+
+	/**
+	 * @var Ticket
+	 */
 	static private $ticket;
 	static private $request_attributes;
 
@@ -76,20 +84,22 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 
 		try
 		{
-			$response = $operation($request);
+			$operation($request);
 
-			$this->fail("Expected Failure exception.");
+			$this->fail("Expected Failure");
 		}
-		catch (\Exception $e)
+		catch (Failure $e)
 		{
-			$this->assertInstanceOf('ICanBoogie\Operation\Failure', $e);
-
 			$errors = $e->operation->response->errors;
 
 			$this->assertNotNull($errors['token']);
 			$this->assertNotNull($errors['email']);
 			$this->assertNotNull($errors['password']);
 			$this->assertNotNull($errors['password-verify']);
+		}
+		catch (\Exception $e)
+		{
+			$this->fail("Expected Failure");
 		}
 
 		#
@@ -123,20 +133,22 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 
 		try
 		{
-			$response = $operation($request);
+			$operation($request);
 
-			$this->fail("Expected Failure exception.");
+			$this->fail("Expected Failure");
 		}
-		catch (\Exception $e)
+		catch (Failure $e)
 		{
-			$this->assertInstanceOf('ICanBoogie\Operation\Failure', $e);
-
 			$errors = $e->operation->response->errors;
 
 			$this->assertNotNull($errors['token']);
 			$this->assertNull($errors['email']);
 			$this->assertNull($errors['password']);
 			$this->assertNull($errors['password-verify']);
+		}
+		catch (\Exception $e)
+		{
+			$this->fail("Expected Failure");
 		}
 
 		#
@@ -170,20 +182,22 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 
 		try
 		{
-			$response = $operation($request);
+			$operation($request);
 
-			$this->fail("Expected Failure exception.");
+			$this->fail("Expected Failure");
 		}
-		catch (\Exception $e)
+		catch (Failure $e)
 		{
-			$this->assertInstanceOf('ICanBoogie\Operation\Failure', $e);
-
 			$errors = $e->operation->response->errors;
 
 			$this->assertNull($errors['token']);
 			$this->assertNotNull($errors['email']);
 			$this->assertNull($errors['password']);
 			$this->assertNull($errors['password-verify']);
+		}
+		catch (\Exception $e)
+		{
+			$this->fail("Expected Failure");
 		}
 
 		#
@@ -217,20 +231,22 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 
 		try
 		{
-			$response = $operation($request);
+			$operation($request);
 
-			$this->fail("Expected Failure exception.");
+			$this->fail("Expected Failure");
 		}
-		catch (\Exception $e)
+		catch (Failure $e)
 		{
-			$this->assertInstanceOf('ICanBoogie\Operation\Failure', $e);
-
 			$errors = $e->operation->response->errors;
 
 			$this->assertNull($errors['token']);
 			$this->assertNull($errors['email']);
 			$this->assertNotNull($errors['password']);
 			$this->assertNull($errors['password-verify']);
+		}
+		catch (\Exception $e)
+		{
+			$this->fail("Expected Failure");
 		}
 
 		#
@@ -283,20 +299,22 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 
 		try
 		{
-			$response = $operation($request);
+			$operation($request);
 
-			$this->fail("Expected Failure exception.");
+			$this->fail("Expected Failure");
 		}
-		catch (\Exception $e)
+		catch (Failure $e)
 		{
-			$this->assertInstanceOf('ICanBoogie\Operation\Failure', $e);
-
 			$errors = $e->operation->response->errors;
 
 			$this->assertNotNull($errors['token']);
 			$this->assertNull($errors['email']);
 			$this->assertNull($errors['password']);
 			$this->assertNull($errors['password-verify']);
+		}
+		catch (\Exception $e)
+		{
+			$this->fail("Expected Failure");
 		}
 
 		#
