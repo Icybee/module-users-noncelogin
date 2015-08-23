@@ -12,12 +12,21 @@
 namespace Icybee\Modules\Users\NonceLogin;
 
 use ICanBoogie\HTTP\Request;
+use ICanBoogie\Operation\Failure;
 
 class NonceLoginRequestTest extends \PHPUnit_Framework_TestCase
 {
+	/**
+	 * @var $app \ICanBoogie\Core|\ICanBoogie\Binding\ActiveRecord\CoreBindings|\ICanBoogie\Binding\Routing\CoreBindings
+	 */
+	static private $app;
+
 	static public function setupBeforeClass()
 	{
-		\ICanBoogie\app()->models['users.noncelogin']->truncate();
+		/* @var $app \ICanBoogie\Core|\ICanBoogie\Binding\ActiveRecord\CoreBindings */
+
+		self::$app = $app = \ICanBoogie\app();
+		$app->models['users.noncelogin']->truncate();
 	}
 
 	public function test_invalid_email_address()
@@ -33,11 +42,11 @@ class NonceLoginRequestTest extends \PHPUnit_Framework_TestCase
 
 		try
 		{
-			$response = $operation($request);
+			$operation($request);
 
-			$this->fail('The Failure exception should have been thrown.');
+			$this->fail("Expected Failure");
 		}
-		catch (\ICanBoogie\Operation\Failure $e)
+		catch (Failure $e)
 		{
 			$response = $e->operation->response;
 
@@ -45,7 +54,11 @@ class NonceLoginRequestTest extends \PHPUnit_Framework_TestCase
 			$this->assertNull($response->message);
 			$this->assertNotEmpty($response->errors['email']);
 			$this->assertInstanceOf('ICanBoogie\I18n\FormattedString', $response->errors['email']);
-			$this->assertTrue($response->is_client_error);
+			$this->assertTrue($response->status->is_client_error);
+		}
+		catch (\Exception $e)
+		{
+			$this->fail("Expected Failure");
 		}
 	}
 
@@ -75,7 +88,7 @@ class NonceLoginRequestTest extends \PHPUnit_Framework_TestCase
 		$this->assertArrayHasKey('to', $mailer_options);
 		$this->assertEquals($operation->user->email, $mailer_options['to']);
 		$this->assertArrayHasKey('body', $mailer_options);
-		$this->assertTrue(strpos($mailer_options['body'], \ICanBoogie\app()->routes['nonce-login']->format($operation->ticket)->absolute_url) !== false);
+		$this->assertTrue(strpos($mailer_options['body'], self::$app->routes['nonce-login']->format($operation->ticket)->absolute_url) !== false);
 	}
 
 	/**
@@ -98,15 +111,19 @@ class NonceLoginRequestTest extends \PHPUnit_Framework_TestCase
 		{
 			$operation($request);
 
-			$this->fail('The Failure exception should have been thrown.');
+			$this->fail("Expected Failure");
+		}
+		catch (Failure $e)
+		{
+			/* @var $previous TicketAlreadySent */
+
+			$previous = $e->previous;
+			$this->assertInstanceOf(TicketAlreadySent::class, $previous);
+			$this->assertInstanceOf(Ticket::class, $previous->ticket);
 		}
 		catch (\Exception $e)
 		{
-			$this->assertInstanceOf('ICanBoogie\Operation\Failure', $e);
-
-			$previous = $e->previous;
-			$this->assertInstanceOf(__NAMESPACE__ . '\TicketAlreadySent', $previous);
-			$this->assertInstanceOf(__NAMESPACE__ . '\Ticket', $previous->ticket);
+			$this->fail("Expected Failure");
 		}
 	}
 
@@ -127,7 +144,7 @@ class NonceLoginRequestTest extends \PHPUnit_Framework_TestCase
 		/* @var $response \ICanBoogie\Operation\Response */
 
 		$response = $request();
-		$this->assertFalse($response->is_successful);
+		$this->assertFalse($response->status->is_successful);
 		$this->assertEquals(403, $response->status);
 		$this->assertStringStartsWith("A message has already been sent", $response->message);
 	}

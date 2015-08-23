@@ -14,6 +14,7 @@ namespace Icybee\Modules\Users\NonceLogin;
 use ICanBoogie\Operation;
 
 use Brickrouge\Button;
+use Brickrouge\Document;
 use Brickrouge\Element;
 use Brickrouge\Form;
 use Brickrouge\Text;
@@ -23,9 +24,9 @@ class NonceLoginRequestForm extends Form
 	/**
 	 * Adds the "widget.css" and "widget.js" assets.
 	 *
-	 * @param \Brickrouge\Document $document
+	 * @param Document $document
 	 */
-	static protected function add_assets(\Brickrouge\Document $document)
+	static protected function add_assets(Document $document)
 	{
 		parent::add_assets($document);
 
@@ -33,7 +34,7 @@ class NonceLoginRequestForm extends Form
 		$document->js->add(DIR . 'public/widget.js');
 	}
 
-	public function __construct(array $attributes=[])
+	public function __construct(array $attributes = [])
 	{
 		parent::__construct($attributes + [
 

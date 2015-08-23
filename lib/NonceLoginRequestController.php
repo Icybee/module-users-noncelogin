@@ -12,10 +12,11 @@
 namespace Icybee\Modules\Users\NonceLogin;
 
 use ICanBoogie\HTTP\Request;
+use ICanBoogie\Routing\Controller;
 
-class NonceLoginRequestController extends \ICanBoogie\Routing\Controller
+class NonceLoginRequestController extends Controller
 {
-	public function __invoke(Request $request)
+	public function action(Request $request)
 	{
 		return new NonceLoginRequestForm;
 	}

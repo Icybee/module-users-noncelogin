@@ -27,7 +27,7 @@ class Hooks
 	{
 		$user = $target->user;
 		$ticket = $target->ticket;
-		$app = \ICanBoogie\app();
+		$app = self::app();
 		$url = $app->routes['nonce-login']->format($ticket)->absolute_url;
 		$local_expire_at = $ticket->expire_at->local;
 		$until = $local_expire_at->format('H:i');
@@ -38,6 +38,8 @@ class Hooks
 			'scope' => \ICanBoogie\normalize($user->constructor, '_') . '.nonce_login_request.operation'
 
 		]);
+
+		/* @var $app \ICanBoogie\Core|\ICanBoogie\Binding\Mailer\CoreBindings */
 
 		$app->mail([
 
@@ -66,5 +68,17 @@ class Hooks
 	static public function on_nonce_login_get_form(GetFormEvent $event)
 	{
 		$event->form = new NonceLoginForm;
+	}
+
+	/*
+	 * Support
+	 */
+
+	/**
+	 * @return \ICanBoogie\Core|\ICanBoogie\Binding\Routing\CoreBindings|\ICanBoogie\Binding\Mail\CoreBindings
+	 */
+	static private function app()
+	{
+		return \ICanBoogie\app();
 	}
 }

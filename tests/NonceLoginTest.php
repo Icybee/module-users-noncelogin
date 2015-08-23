@@ -32,6 +32,8 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 	{
 		$app = \ICanBoogie\app();
 
+		/* @var $model TicketModel */
+
 		self::$model = $model = $app->models['users.noncelogin'];
 		$model->truncate();
 

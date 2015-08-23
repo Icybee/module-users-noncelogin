@@ -14,11 +14,14 @@ namespace Icybee\Modules\Users\NonceLogin;
 use ICanBoogie\ActiveRecord;
 use ICanBoogie\DateTime;
 
+use Icybee\Modules\Users\User;
+
 /**
  * Representation of a password request.
  *
  * @property-read TicketModel $model
  * @property DateTime $expire_at Date at which the ticket expires.
+ * @property User $user
  */
 class Ticket extends ActiveRecord
 {

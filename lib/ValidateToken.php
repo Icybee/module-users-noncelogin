@@ -21,7 +21,7 @@ use ICanBoogie\Errors;
  */
 trait ValidateToken
 {
-	protected function validate_token($token, Errors $errors, Ticket &$ticket=null)
+	protected function validate_token($token, Errors $errors, Ticket &$ticket = null)
 	{
 		if (!$token)
 		{

@@ -12,9 +12,12 @@
 namespace Icybee\Modules\Users\NonceLogin;
 
 use ICanBoogie\Accessor\AccessorTrait;
+use ICanBoogie\HTTP\Status;
 
 /**
  * Exception thrown in attempt to request a ticket before the end of the cooldown period.
+ *
+ * @property-read $ticket
  */
 class TicketAlreadySent extends \Exception
 {
@@ -27,7 +30,7 @@ class TicketAlreadySent extends \Exception
 		return $this->ticket;
 	}
 
-	public function __construct(Ticket $ticket, $message, $code=500, \Exception $previous=null)
+	public function __construct(Ticket $ticket, $message, $code = Status::INTERNAL_SERVER_ERROR, \Exception $previous = null)
 	{
 		$this->ticket = $ticket;
 

@@ -11,7 +11,9 @@
 
 namespace Icybee\Modules\Users\NonceLogin;
 
-class TicketModel extends \ICanBoogie\ActiveRecord\Model
+use ICanBoogie\ActiveRecord\Model;
+
+class TicketModel extends Model
 {
 	/**
 	 * Generates a unique 40 characters long token.

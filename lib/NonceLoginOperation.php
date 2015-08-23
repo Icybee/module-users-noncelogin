@@ -14,6 +14,7 @@ namespace Icybee\Modules\Users\NonceLogin;
 use ICanBoogie\ActiveRecord;
 use ICanBoogie\Errors;
 use ICanBoogie\HTTP\Request;
+use ICanBoogie\Operation;
 
 /**
  * The "nonce-login" operation is used to login a user using a one time, time limited pass created
@@ -24,7 +25,7 @@ use ICanBoogie\HTTP\Request;
  * @property-read string $email The email of the user.
  * @property-read string $password The new password of the user.
  */
-class NonceLoginOperation extends \ICanBoogie\Operation
+class NonceLoginOperation extends Operation
 {
 	use ValidateToken;
 
@@ -39,14 +40,14 @@ class NonceLoginOperation extends \ICanBoogie\Operation
 
 	protected function get_email()
 	{
-		return $email;
+		return $this->email;
 	}
 
 	private $password;
 
 	protected function get_password()
 	{
-		return $password;
+		return $this->password;
 	}
 
 	protected function get_user()
@@ -63,7 +64,10 @@ class NonceLoginOperation extends \ICanBoogie\Operation
 		] + parent::get_controls();
 	}
 
-	protected function validate(\ICanboogie\Errors $errors)
+	/**
+	 * @inheritdoc
+	 */
+	protected function validate(Errors $errors)
 	{
 		$request = $this->request;
 
@@ -128,7 +132,7 @@ class NonceLoginOperation extends \ICanBoogie\Operation
 
 		$response = $login_request();
 
-		if (!$response->is_successful)
+		if (!$response->status->is_successful)
 		{
 			throw new \Exception("Unable to login");
 		}

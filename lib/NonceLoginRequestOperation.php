@@ -127,6 +127,8 @@ class NonceLoginRequestOperation extends Operation
 			$this->app->locale = $user->language;
 		}
 
+		/* @var $expire_at \ICanBoogie\DateTime */
+
 		$expire_at = null;
 		$ticket = $this->module->model->filter_by_uid($user->uid)->one;
 
