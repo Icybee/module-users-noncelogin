@@ -14,13 +14,13 @@ return [
 
 		'primary' => [
 
-			Model::ACTIVERECORD_CLASS => __NAMESPACE__ . '\Ticket',
+			Model::ACTIVERECORD_CLASS => Ticket::class,
 			Model::BELONGS_TO => 'users',
-			Model::CLASSNAME => __NAMESPACE__ . '\TicketModel',
+			Model::CLASSNAME => TicketModel::class,
 			Model::SCHEMA => [
 
 				'token' => [ 'char', 40, 'charset' => 'ascii/bin', 'primary' => true ],
-				'uid' => [ 'foreign', 'charset' => 'ascii/bin', 'unique' => true ],
+				'uid' => [ 'foreign', 'unique' => true ],
 				'ip' => [ 'varchar', 'charset' => 'ascii/bin', 40 ],
 				'expire_at' => 'timestamp'
 

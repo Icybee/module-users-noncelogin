@@ -94,5 +94,4 @@ class NonceLoginForm extends Form
 
 		return parent::render();
 	}
-
 }
