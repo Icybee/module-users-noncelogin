@@ -9,12 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Icybee\Modules\Users\NonceLogin;
+namespace Icybee\Modules\Users\NonceLogin\Operation;
 
 use ICanBoogie\ActiveRecord;
 use ICanBoogie\Errors;
 use ICanBoogie\HTTP\Request;
 use ICanBoogie\Operation;
+
+use Icybee\Modules\Users\NonceLogin\Ticket;
+use Icybee\Modules\Users\NonceLogin\ValidateToken;
 
 /**
  * The "nonce-login" operation is used to login a user using a one time, time limited pass created

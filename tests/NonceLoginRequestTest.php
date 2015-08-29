@@ -14,6 +14,8 @@ namespace Icybee\Modules\Users\NonceLogin;
 use ICanBoogie\HTTP\Request;
 use ICanBoogie\Operation\Failure;
 
+use Icybee\Modules\Users\NonceLogin\Operation\NonceLoginRequestOperation;
+
 class NonceLoginRequestTest extends \PHPUnit_Framework_TestCase
 {
 	/**

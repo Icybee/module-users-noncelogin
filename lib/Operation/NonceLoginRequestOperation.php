@@ -9,12 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Icybee\Modules\Users\NonceLogin;
+namespace Icybee\Modules\Users\NonceLogin\Operation;
 
 use ICanBoogie\DateTime;
 use ICanBoogie\Errors;
 use ICanBoogie\HTTP\Request;
 use ICanBoogie\Operation;
+
+use Icybee\Modules\Users\NonceLogin\Module;
+use Icybee\Modules\Users\NonceLogin\Ticket;
+use Icybee\Modules\Users\NonceLogin\TicketAlreadySent;
+use Icybee\Modules\Users\NonceLogin\TicketModel;
 use Icybee\Modules\Users\User;
 
 /**

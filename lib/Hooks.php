@@ -15,6 +15,8 @@ use ICanBoogie\I18n\Translator\Proxi;
 use ICanBoogie\Operation\ProcessEvent;
 use ICanBoogie\Operation\GetFormEvent;
 
+use Icybee\Modules\Users\NonceLogin\Operation\NonceLoginRequestOperation;
+
 class Hooks
 {
 	/**
