@@ -18,19 +18,19 @@
 		"issues": "https://github.com/Icybee/module-users-noncelogin/issues",
 		"source": "https://github.com/Icybee/module-users-noncelogin"
 	},
-
+	"minimum-stability": "dev",
 	"require": {
-		"php": ">=5.4.0",
+		"php": ">=5.5.0",
 		"icanboogie/module-installer": "~1.2",
-		"icanboogie/activerecord": "~2.1",
+		"icanboogie/activerecord": "^2.3.0",
 		"icanboogie/i18n": "~2.0",
-		"icybee/module-users": "~2.0",
-		"icybee/module-registry": "~2.0"
+		"icybee/module-users": "^3.0.0",
+		"icybee/module-registry": "^3.0.0"
 	},
 
 	"require-dev": {
-		"brickrouge/brickrouge": "~2.1",
-		"icanboogie/icanboogie": "~2.0"
+		"brickrouge/brickrouge": "^2.1.0",
+		"icanboogie/icanboogie": "^2.4.0"
 	},
 
 	"autoload": {
