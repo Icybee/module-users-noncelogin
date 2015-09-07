@@ -25,7 +25,7 @@ trait ValidateToken
 	{
 		if (!$token)
 		{
-			$errors['token'] = $errors->format("The param %param is required.", [ 'param' => 'token' ]);
+			$errors->add('token', "The param %param is required.", [ 'param' => 'token' ]);
 
 			return false;
 		}
@@ -34,14 +34,14 @@ trait ValidateToken
 
 		if (!$ticket)
 		{
-			$errors['token'] = $errors->format("Invalid token, the ticket might have expired or already been used.");
+			$errors->add('token', "Invalid token, the ticket might have expired or already been used.");
 
 			return false;
 		}
 
 		if ($ticket->expire_at < DateTime::now())
 		{
-			$errors['token'] = $errors->format("This ticket has expired at :date.", [
+			$errors->add('token', "This ticket has expired at :date.", [
 
 				':date' => $ticket->expire_at->local
 
@@ -56,7 +56,7 @@ trait ValidateToken
 		}
 		catch (RecordNotFound $e)
 		{
-			$errors['uid'] = $errors->format("The user associated with this ticket no longer exists.");
+			$errors->add('uid', "The user associated with this ticket no longer exists.");
 
 			return false;
 		}

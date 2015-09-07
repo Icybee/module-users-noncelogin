@@ -91,7 +91,7 @@ class NonceLoginOperation extends Operation
 
 		if (!$uid || ($this->ticket && $uid != $this->ticket->user->uid))
 		{
-			$errors['email'] = $errors->format("Invalid email address %email", [
+			$errors->add('email', "Invalid email address %email", [
 
 				'email' => $email
 
@@ -104,7 +104,7 @@ class NonceLoginOperation extends Operation
 
 		if ($password != $request['password-verify'])
 		{
-			$errors['password'] = $errors->format("Passwords don't match");
+			$errors->add('password', "Passwords don't match");
 		}
 
 		return $errors;

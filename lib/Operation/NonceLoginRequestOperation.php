@@ -106,14 +106,14 @@ class NonceLoginRequestOperation extends Operation
 
 		if (!$email)
 		{
-			$errors['email'] = $errors->format('The field %field is required!', [ '%field' => 'Votre adresse E-Mail' ]);
+			$errors->add('email', "The field %field is required!", [ '%field' => 'Votre adresse E-Mail' ]);
 
 			return false;
 		}
 
 		if (!filter_var($email, FILTER_VALIDATE_EMAIL))
 		{
-			$errors['email'] = $errors->format("Invalid email address: %email.", ['%email' => $email ]);
+			$errors->add('email', "Invalid email address: %email.", ['%email' => $email ]);
 
 			return false;
 		}
@@ -122,7 +122,7 @@ class NonceLoginRequestOperation extends Operation
 
 		if (!$user)
 		{
-			$errors['email'] = $errors->format("Unknown email address.");
+			$errors->add('email', "Unknown email address.");
 
 			return false;
 		}
