@@ -34,10 +34,6 @@ class FakeSession extends \ICanBoogie\Session
 	public function regenerate_id($delete_old_session=false)
 	{
 	}
-
-	public function regenerate_token()
-	{
-	}
 }
 
 /* @var $app Core|\ICanBoogie\Module\CoreBindings|\ICanBoogie\Binding\Mailer\CoreBindings */
