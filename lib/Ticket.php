@@ -86,8 +86,10 @@ class Ticket extends ActiveRecord
 	/**
 	 * A token is obtained from the model if {@link $token} is empty. {@link $expire_at} is set
 	 * to `time() + FRESH_PERIOD` if it is empty.
+	 *
+	 * @inheritdoc
 	 */
-	public function save()
+	public function save(array $options = [])
 	{
 		if (!$this->token)
 		{
@@ -99,6 +101,6 @@ class Ticket extends ActiveRecord
 			$this->set_expire_at('@' . (time() + self::FRESH_PERIOD));
 		}
 
-		return parent::save();
+		return parent::save($options);
 	}
 }
