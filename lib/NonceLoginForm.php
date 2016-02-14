@@ -41,7 +41,7 @@ class NonceLoginForm extends Form
 
 			],
 
-			Form::RENDERER => 'Group',
+			Form::RENDERER => Form\GroupRenderer::class,
 
 			Element::CHILDREN => [
 

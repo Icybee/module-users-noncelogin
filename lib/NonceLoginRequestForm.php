@@ -11,6 +11,7 @@
 
 namespace Icybee\Modules\Users\NonceLogin;
 
+use Brickrouge\Group;
 use ICanBoogie\Operation;
 
 use Brickrouge\Button;
@@ -40,7 +41,7 @@ class NonceLoginRequestForm extends Form
 
 			Form::ACTIONS => new Button('Send', [ 'type' => 'submit', 'class' => 'btn-primary' ]),
 
-			Form::RENDERER => 'Simple',
+			Form::RENDERER => Form\GroupRenderer::class,
 
 			Form::HIDDENS => [
 
@@ -53,7 +54,7 @@ class NonceLoginRequestForm extends Form
 
 				'email' => new Text([
 
-					Form::LABEL => 'your_email',
+					Group::LABEL => 'your_email',
 					Element::REQUIRED => true,
 					Element::VALIDATOR => [ 'Brickrouge\Form::validate_email' ]
 
@@ -61,7 +62,7 @@ class NonceLoginRequestForm extends Form
 
 			],
 
-			Element::IS => 'NonceRequest',
+			Element::IS => 'user-nonce-request',
 
 			'class' => 'widget-nonce-request',
 			'name' => 'users/nonce-request'

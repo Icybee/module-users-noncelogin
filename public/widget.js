@@ -1,9 +1,19 @@
-Brickrouge.Widget.NonceRequest = new Class({
+!function (Brickrouge) {
 
-	Extends: Brickrouge.Form,
+	Brickrouge.Widget.NonceRequest = new Class({
 
-	options: {
+		Extends: Brickrouge.Form,
 
-		useXHR: true
-	}
-})
+		options: {
+
+			useXHR: true
+		}
+	})
+
+	Brickrouge.register('user-nonce-request', function (element, options) {
+
+		return new Brickrouge.Widget.NonceRequest(element, options)
+
+	})
+
+} (Brickrouge);

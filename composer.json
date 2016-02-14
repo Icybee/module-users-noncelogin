@@ -29,7 +29,7 @@
 	},
 
 	"require-dev": {
-		"brickrouge/brickrouge": "^2.1",
+		"brickrouge/brickrouge": "^3.0",
 		"icanboogie/icanboogie": "^3.0"
 	},
 
