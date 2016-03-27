@@ -14,14 +14,21 @@ namespace Icybee\Modules\Users\NonceLogin;
 use ICanBoogie\ActiveRecord;
 use ICanBoogie\ActiveRecord\RecordNotFound;
 use ICanBoogie\DateTime;
-use ICanBoogie\Errors;
+use ICanBoogie\ErrorCollection;
 
 /**
  * A trait to validate nonce tokens and retrieve their associated ticket.
  */
 trait ValidateToken
 {
-	protected function validate_token($token, Errors $errors, Ticket &$ticket = null)
+	/**
+	 * @param string $token
+	 * @param ErrorCollection $errors
+	 * @param Ticket|null $ticket
+	 *
+	 * @return bool
+	 */
+	protected function validate_token($token, ErrorCollection $errors, Ticket &$ticket = null)
 	{
 		if (!$token)
 		{

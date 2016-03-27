@@ -11,7 +11,6 @@
 
 namespace Icybee\Modules\Users\NonceLogin;
 
-use ICanBoogie\Errors;
 use ICanBoogie\Core;
 
 use Icybee\Modules\Users\User;
@@ -47,16 +46,7 @@ $app = new Core(\ICanBoogie\array_merge_recursive(\ICanBoogie\get_autoconfig(), 
 
 $app->session = new FakeSession;
 $app->boot();
-
-$errors = $app->modules->install(new Errors);
-
-if ($errors->count())
-{
-	foreach ($errors as  $module_id => $message)
-	{
-		echo "$module_id: $message\n";
-	}
-}
+$app->modules->install();
 
 #
 # Create a user account

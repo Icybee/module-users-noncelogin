@@ -56,7 +56,7 @@ class NonceLoginRequestForm extends Form
 
 					Group::LABEL => 'your_email',
 					Element::REQUIRED => true,
-					Element::VALIDATOR => [ 'Brickrouge\Form::validate_email' ]
+					Element::VALIDATION => 'email'
 
 				])
 

@@ -12,7 +12,7 @@
 namespace Icybee\Modules\Users\NonceLogin\Operation;
 
 use ICanBoogie\DateTime;
-use ICanBoogie\Errors;
+use ICanBoogie\ErrorCollection;
 use ICanBoogie\HTTP\Request;
 use ICanBoogie\Operation;
 
@@ -100,7 +100,10 @@ class NonceLoginRequestOperation extends Operation
 		return $this->ticket;
 	}
 
-	protected function validate(Errors $errors)
+	/**
+	 * @inheritdoc
+	 */
+	protected function validate(ErrorCollection $errors)
 	{
 		$email = $this->request['email'];
 
@@ -146,7 +149,7 @@ class NonceLoginRequestOperation extends Operation
 		{
 			throw new TicketAlreadySent
 			(
-				$ticket, $errors->format("nonce_login_request.operation.already_sent", [
+				$ticket, $this->format("nonce_login_request.operation.already_sent", [
 
 					':time' => DateTime::from('@' . ($expire_at->timestamp - Module::FRESH_PERIOD + Module::COOLOFF_DELAY), 'utc')->local->format('H:i')
 
@@ -156,7 +159,7 @@ class NonceLoginRequestOperation extends Operation
 			);
 		}
 
-		return true;
+		return $errors;
 	}
 
 	/**

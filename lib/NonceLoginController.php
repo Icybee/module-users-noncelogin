@@ -12,7 +12,7 @@
 namespace Icybee\Modules\Users\NonceLogin;
 
 use ICanBoogie\Binding\Routing\ForwardUndefinedPropertiesToApplication;
-use ICanBoogie\Errors;
+use ICanBoogie\ErrorCollection;
 use ICanBoogie\HTTP\Request;
 
 use ICanBoogie\HTTP\RedirectResponse;
@@ -32,7 +32,7 @@ class NonceLoginController extends Controller
 	{
 		$this->request = $request;
 
-		$errors = new Errors;
+		$errors = new ErrorCollection;
 		$this->validate($errors);
 
 		if ($errors->count())
@@ -59,7 +59,10 @@ class NonceLoginController extends Controller
 		return $this->ticket;
 	}
 
-	protected function validate(Errors $errors)
+	/**
+	 * @inheritdoc
+	 */
+	protected function validate(ErrorCollection $errors)
 	{
 		$this->validate_token($this->request['token'], $errors, $this->ticket);
 

@@ -12,7 +12,7 @@
 namespace Icybee\Modules\Users\NonceLogin\Operation;
 
 use ICanBoogie\ActiveRecord;
-use ICanBoogie\Errors;
+use ICanBoogie\ErrorCollection;
 use ICanBoogie\HTTP\Request;
 use ICanBoogie\Operation;
 
@@ -70,7 +70,7 @@ class NonceLoginOperation extends Operation
 	/**
 	 * @inheritdoc
 	 */
-	protected function validate(Errors $errors)
+	protected function validate(ErrorCollection $errors)
 	{
 		$request = $this->request;
 
