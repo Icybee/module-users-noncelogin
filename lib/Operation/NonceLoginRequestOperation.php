@@ -46,11 +46,11 @@ class NonceLoginRequestOperation extends Operation
 	 *
 	 * @inheritdoc
 	 */
-	public function __construct($request = null)
+	protected function action(Request $request)
 	{
-		parent::__construct($request);
-
 		$this->module = $this->app->modules['users.noncelogin'];
+
+		parent::action($request);
 	}
 
 	/**
