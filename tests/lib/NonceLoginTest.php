@@ -11,6 +11,7 @@
 
 namespace Icybee\Modules\Users\NonceLogin;
 
+use function ICanBoogie\app;
 use ICanBoogie\HTTP\Request;
 use ICanBoogie\Operation\Failure;
 use Icybee\Modules\Users\NonceLogin\Operation\NonceLoginOperation;
@@ -111,7 +112,7 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 
 		$response = $request();
 
-		$this->assertFalse($response->is_successful);
+		$this->assertFalse($response->status->is_successful);
 
 		$errors = $response->errors;
 
@@ -144,10 +145,10 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 		{
 			$errors = $e->operation->response->errors;
 
-			$this->assertNotNull($errors['token']);
-			$this->assertNull($errors['email']);
-			$this->assertNull($errors['password']);
-			$this->assertNull($errors['password-verify']);
+			$this->assertNotEmpty($errors['token']);
+			$this->assertEmpty($errors['email']);
+			$this->assertEmpty($errors['password']);
+			$this->assertEmpty($errors['password-verify']);
 		}
 		catch (\Exception $e)
 		{
@@ -160,14 +161,14 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 
 		$response = $request();
 
-		$this->assertFalse($response->is_successful);
+		$this->assertFalse($response->status->is_successful);
 
 		$errors = $response->errors;
 
-		$this->assertNotNull($errors['token']);
-		$this->assertNull($errors['email']);
-		$this->assertNull($errors['password']);
-		$this->assertNull($errors['password-verify']);
+		$this->assertNotEmpty($errors['token']);
+		$this->assertEmpty($errors['email']);
+		$this->assertEmpty($errors['password']);
+		$this->assertEmpty($errors['password-verify']);
 	}
 
 	public function test_invalid_email()
@@ -193,10 +194,10 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 		{
 			$errors = $e->operation->response->errors;
 
-			$this->assertNull($errors['token']);
-			$this->assertNotNull($errors['email']);
-			$this->assertNull($errors['password']);
-			$this->assertNull($errors['password-verify']);
+			$this->assertEmpty($errors['token']);
+			$this->assertNotEmpty($errors['email']);
+			$this->assertEmpty($errors['password']);
+			$this->assertEmpty($errors['password-verify']);
 		}
 		catch (\Exception $e)
 		{
@@ -209,14 +210,14 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 
 		$response = $request();
 
-		$this->assertFalse($response->is_successful);
+		$this->assertFalse($response->status->is_successful);
 
 		$errors = $response->errors;
 
-		$this->assertNull($errors['token']);
-		$this->assertNotNull($errors['email']);
-		$this->assertNull($errors['password']);
-		$this->assertNull($errors['password-verify']);
+		$this->assertEmpty($errors['token']);
+		$this->assertNotEmpty($errors['email']);
+		$this->assertEmpty($errors['password']);
+		$this->assertEmpty($errors['password-verify']);
 	}
 
 	public function test_invalid_passwords()
@@ -242,10 +243,10 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 		{
 			$errors = $e->operation->response->errors;
 
-			$this->assertNull($errors['token']);
-			$this->assertNull($errors['email']);
-			$this->assertNotNull($errors['password']);
-			$this->assertNull($errors['password-verify']);
+			$this->assertEmpty($errors['token']);
+			$this->assertEmpty($errors['email']);
+			$this->assertNotEmpty($errors['password']);
+			$this->assertEmpty($errors['password-verify']);
 		}
 		catch (\Exception $e)
 		{
@@ -258,26 +259,26 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 
 		$response = $request();
 
-		$this->assertFalse($response->is_successful);
+		$this->assertFalse($response->status->is_successful);
 
 		$errors = $response->errors;
 
-		$this->assertNull($errors['token']);
-		$this->assertNull($errors['email']);
-		$this->assertNotNull($errors['password']);
-		$this->assertNull($errors['password-verify']);
+		$this->assertEmpty($errors['token']);
+		$this->assertEmpty($errors['email']);
+		$this->assertNotEmpty($errors['password']);
+		$this->assertEmpty($errors['password-verify']);
 	}
 
 	public function test_request()
 	{
-		$app = \ICanBoogie\app();
+		$app = app();
 
 		$request = Request::from(self::$request_attributes);
 		$response = $request();
 
-		$this->assertTrue($response->is_successful);
+		$this->assertTrue($response->status->is_successful);
 		$this->assertNotEmpty($response['redirect_to']);
-		$this->assertNotNull($app->user);
+		$this->assertNotEmpty($app->user);
 		$this->assertEquals(1, $app->user_id);
 
 		// the ticket for the user must be destroyed.
@@ -310,10 +311,10 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 		{
 			$errors = $e->operation->response->errors;
 
-			$this->assertNotNull($errors['token']);
-			$this->assertNull($errors['email']);
-			$this->assertNull($errors['password']);
-			$this->assertNull($errors['password-verify']);
+			$this->assertNotEmpty($errors['token']);
+			$this->assertEmpty($errors['email']);
+			$this->assertEmpty($errors['password']);
+			$this->assertEmpty($errors['password-verify']);
 		}
 		catch (\Exception $e)
 		{
@@ -326,13 +327,13 @@ class NonceLoginTest extends \PHPUnit_Framework_TestCase
 
 		$response = $request();
 
-		$this->assertFalse($response->is_successful);
+		$this->assertFalse($response->status->is_successful);
 
 		$errors = $response->errors;
 
-		$this->assertNotNull($errors['token']);
-		$this->assertNull($errors['email']);
-		$this->assertNull($errors['password']);
-		$this->assertNull($errors['password-verify']);
+		$this->assertNotEmpty($errors['token']);
+		$this->assertEmpty($errors['email']);
+		$this->assertEmpty($errors['password']);
+		$this->assertEmpty($errors['password-verify']);
 	}
 }

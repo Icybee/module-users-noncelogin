@@ -11,6 +11,7 @@
 
 namespace Icybee\Modules\Users\NonceLogin;
 
+use function ICanBoogie\app;
 use ICanBoogie\DateTime;
 use Icybee\Modules\Users\User;
 
@@ -23,7 +24,7 @@ class RecordTest extends \PHPUnit_Framework_TestCase
 
 	static public function setupBeforeClass()
 	{
-		self::$model = \ICanBoogie\app()->models['users.noncelogin'];
+		self::$model = app()->models['users.noncelogin'];
 		self::$model->truncate();
 	}
 
@@ -71,7 +72,7 @@ class RecordTest extends \PHPUnit_Framework_TestCase
 
 		$t->save();
 
-		$this->assertEquals(Ticket::FRESH_PERIOD, $t->expire_at->timestamp - DateTime::now()->timestamp);
+		$this->assertGreaterThanOrEqual(Ticket::FRESH_PERIOD, $t->expire_at->timestamp - DateTime::now()->timestamp);
 
 		$t->delete();
 	}

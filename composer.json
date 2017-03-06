@@ -25,13 +25,19 @@
 	"require": {
 		"php": ">=5.5",
 		"icanboogie/module-installer": "^1.2",
-		"icybee/module-users": "^3.0",
-		"icybee/module-registry": "^3.0"
+		"icybee/module-users": "^4.0",
+		"icybee/module-registry": "^4.0",
+		"brickrouge/bind-icanboogie-validate": "dev-master"
 	},
 	"autoload": {
 		"psr-4": {
 			"Icybee\\Modules\\Users\\NonceLogin\\": "lib"
 		}
+	},
+	"autoload-dev": {
+		"classmap": [
+			"tests/Application.php"
+		]
 	},
 	"scripts": {
 		"post-autoload-dump": "ICanBoogie\\Autoconfig\\Hooks::on_autoload_dump"

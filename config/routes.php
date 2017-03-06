@@ -9,7 +9,7 @@ return [
 	'api:nonce-login-request' => [
 
 		'pattern' => '/api/nonce-login-request',
-		'controller' => __NAMESPACE__ . '\NonceLoginRequestOperation',
+		'controller' => Operation\NonceLoginRequestOperation::class,
 		'via' => Request::METHOD_POST
 
 	],
@@ -17,7 +17,7 @@ return [
 	'api:inline-nonce-login-request' => [
 
 		'pattern' => '/api/nonce-login-request/:email',
-		'controller' => __NAMESPACE__ . '\NonceLoginRequestOperation',
+		'controller' => Operation\NonceLoginRequestOperation::class,
 		'via' => Request::METHOD_POST
 
 	],
@@ -25,21 +25,21 @@ return [
 	'api:nonce-login' => [
 
 		'pattern' => '/api/nonce-login',
-		'controller' => __NAMESPACE__ . '\NonceLoginOperation'
+		'controller' => Operation\NonceLoginOperation::class
 
 	],
 
 	'nonce-login-request' => [
 
 		'pattern' => '/nonce-login-request',
-		'controller' => __NAMESPACE__ . '\NonceLoginRequestController'
+		'controller' => NonceLoginRequestController::class
 
 	],
 
 	'nonce-login' => [
 
 		'pattern' => '/nonce-login/<token:[0-9a-z]{40}>',
-		'controller' => __NAMESPACE__ . '\NonceLoginController'
+		'controller' => NonceLoginController::class
 
 	]
 

@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Icybee\Modules\Users\NonceLogin;
-
-use ICanBoogie\Core;
+namespace ICanBoogie;
 
 use Icybee\Modules\Users\User;
+
+chdir(__DIR__);
 
 $_SERVER['DOCUMENT_ROOT'] = __DIR__;
 $_SERVER['HTTP_HOST'] = 'icanboogie.org';
@@ -35,17 +35,8 @@ class FakeSession extends \ICanBoogie\Session
 	}
 }
 
-/* @var $app Core|\ICanBoogie\Module\CoreBindings|\ICanBoogie\Binding\Mailer\CoreBindings */
-
-$app = new Core(\ICanBoogie\array_merge_recursive(\ICanBoogie\get_autoconfig(), [
-
-	'config-path' => [ __DIR__ . DIRECTORY_SEPARATOR . 'config' => 10 ],
-	'module-path' => [ dirname(__DIR__) ]
-
-]));
-
-$app->session = new FakeSession;
-$app->boot();
+$app = boot();
+//$app->session = new FakeSession;
 $app->modules->install();
 
 #
@@ -54,8 +45,9 @@ $app->modules->install();
 
 $user = User::from([
 
-	'email' => 'olivier.laviale@gmail.com',
-	'username' => 'olvlvl'
+	User::EMAIL => 'olivier.laviale@gmail.com',
+	User::USERNAME => 'olvlvl',
+	User::TIMEZONE => 'Europe/Paris'
 
 ]);
 
@@ -67,7 +59,7 @@ $user->save();
 
 global $mailer_options;
 
-$app->mail = function($options) use(&$mailer_options) {
+$app->prototype['mail'] = function(Application $app, array $options) use(&$mailer_options) {
 
 	$mailer_options = $options;
 

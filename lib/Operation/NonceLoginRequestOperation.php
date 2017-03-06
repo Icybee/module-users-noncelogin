@@ -50,7 +50,7 @@ class NonceLoginRequestOperation extends Operation
 	{
 		$this->module = $this->app->modules['users.noncelogin'];
 
-		parent::action($request);
+		return parent::action($request);
 	}
 
 	/**
@@ -192,7 +192,7 @@ class NonceLoginRequestOperation extends Operation
 		$ticket->save();
 
 		$this->ticket = $ticket;
-		$this->response->message = $this->response->errors->format('success', [
+		$this->response->message = $this->format('success', [
 
 			'%email' => $user->email
 
