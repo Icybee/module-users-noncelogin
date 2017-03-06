@@ -1,4 +1,11 @@
-# Nonce Login [![Build Status](https://travis-ci.org/Icybee/module-users-noncelogin.svg?branch=2.0)](https://travis-ci.org/Icybee/module-users-noncelogin)
+# Nonce Login 
+
+[![Packagist](https://img.shields.io/packagist/v/icybee/module-users-noncelogin.svg)](https://packagist.org/packages/icybee/module-users-noncelogin)
+[![Build Status](https://img.shields.io/travis/Icybee/module-users-noncelogin.svg)](http://travis-ci.org/Icybee/module-users-noncelogin)
+[![HHVM](https://img.shields.io/hhvm/Icybee/module-users-noncelogin.svg)](http://hhvm.h4cc.de/package/Icybee/module-users-noncelogin)
+[![Code Quality](https://img.shields.io/scrutinizer/g/Icybee/module-users-noncelogin.svg)](https://scrutinizer-ci.com/g/Icybee/module-users-noncelogin)
+[![Code Coverage](https://img.shields.io/coveralls/Icybee/module-users-noncelogin.svg)](https://coveralls.io/r/Icybee/module-users-noncelogin)
+[![Downloads](https://img.shields.io/packagist/dt/icybee/module-users-noncelogin.svg)](https://packagist.org/packages/icybee/module-users-noncelogin/stats)
 
 Provides nonce login tickets to users who forgot their password, allowing them to reset their
 password and login in the mean time.
@@ -137,8 +144,8 @@ directory can later be cleaned with the `make clean` command.
 
 The package is continuously tested by [Travis CI](http://about.travis-ci.org/).
 
-[![Build Status](https://travis-ci.org/Icybee/module-users-noncelogin.svg?branch=2.0)](https://travis-ci.org/Icybee/module-users-noncelogin)
-
+[![Build Status](https://img.shields.io/travis/Icybee/module-users-noncelogin.svg)](http://travis-ci.org/Icybee/module-users-noncelogin)
+[![Code Coverage](https://img.shields.io/coveralls/Icybee/module-users-noncelogin.svg)](https://coveralls.io/r/Icybee/module-users-noncelogin)
 
 
 
@@ -152,7 +159,7 @@ The module is licensed under the New BSD License - See the [LICENSE](LICENSE) fi
 
 
 
-[icanboogie/mailer]: https://github.com/ICanBoogie/Mailer
-[NonceLoginForm]: http://icybee.org/docs/class-Icybee.Modules.Users.NonceLogin.NonceLoginForm.html
+[icanboogie/mailer]:          https://github.com/ICanBoogie/Mailer
+[NonceLoginForm]:             http://icybee.org/docs/class-Icybee.Modules.Users.NonceLogin.NonceLoginForm.html
 [NonceLoginRequestOperation]: http://icybee.org/docs/class-Icybee.Modules.Users.NonceLogin.NonceLoginRequestOperation.html
-[TicketAlreadySent]: http://icybee.org/docs/class-Icybee.Modules.Users.NonceLogin.TicketAlreadySent.html
+[TicketAlreadySent]:          http://icybee.org/docs/class-Icybee.Modules.Users.NonceLogin.TicketAlreadySent.html
