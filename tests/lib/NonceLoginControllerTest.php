@@ -11,15 +11,14 @@
 
 namespace Icybee\Modules\Users\NonceLogin;
 
+use function ICanBoogie\app;
 use ICanBoogie\HTTP\Request;
 
 class NonceLoginControllerTest extends \PHPUnit_Framework_TestCase
 {
 	public function test_valid_token()
 	{
-		/* @var $app \ICanBoogie\Core|\ICanBoogie\Binding\Routing\CoreBindings */
-
-		$app = \ICanBoogie\app();
+		$app = app();
 
 		$ticket = Ticket::from([
 
@@ -49,9 +48,7 @@ class NonceLoginControllerTest extends \PHPUnit_Framework_TestCase
 
 	public function test_invalid_token()
 	{
-		/* @var $app \ICanBoogie\Core|\ICanBoogie\Binding\Routing\CoreBindings */
-
-		$app = \ICanBoogie\app();
+		$app = app();
 
 		$ticket = Ticket::from([
 
