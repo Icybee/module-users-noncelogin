@@ -66,7 +66,7 @@ package.
 
 ### Altering the message or the mailer sending it
 
-If the `ICanBoogie\Core::mail()` method is provided by the [icanboogie/mailer] package,
+If the `ICanBoogie\Application::mail()` method is provided by the [icanboogie/mailer] package,
 the `Icybee\Modules\Users\NonceLogin\NonceLoginRequestOperation::mail:before` event can be used to
 alter the message or the mailer sending it.
 
